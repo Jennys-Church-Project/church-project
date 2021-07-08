@@ -1,0 +1,68 @@
+/*
+ * Filename: c:\Users\quaby\Documents\Dev\church-project\styles\globals.css
+ * Path: c:\Users\quaby\Documents\Dev\church-project
+ * Created Date: Thursday, June 3rd 2021, 10:53:42 am
+ * Author: Dennis Bilson
+ * 
+ * Copyright (c) 2021 Quabynah Codelabs LLC
+ */
+
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Rubik:wght@400;500&display=swap");
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* images */
+.cover__image {
+  @apply lg:min-w-full object-cover rounded;
+}
+
+.cover__image_max {
+  @apply h-56 w-11/12 lg:h-1/3;
+}
+
+.avatar {
+  @apply rounded-full w-10 h-10 bg-gray-200 border-2 border-gray-400 cursor-pointer object-cover object-center;
+}
+/* end of images */
+
+/* forms */
+.form-row {
+  @apply grid md:grid-cols-2 md:gap-x-2 lg:grid-cols-3 lg:gap-x-4;
+}
+
+.form-col {
+  @apply grid md:grid-rows-2 md:gap-y-1 lg:grid-rows-3;
+}
+
+/* flex flex-col justify-center items-center space-y-4 lg:space-y-0 md: */
+.form-row-2 {
+  @apply md:col-span-1 lg:col-span-2;
+}
+
+.form-row-1\/2 {
+  @apply w-full;
+}
+
+.form-control {
+  @apply lg:mb-6;
+}
+
+.form-control > label {
+  @apply text-xs text-black text-opacity-50 mb-2;
+}
+
+.form-control > input {
+  @apply py-2 px-4 text-sm w-full rounded-full focus:ring-offset-transparent focus:ring-transparent focus:outline-none;
+}
+/* end of forms */
+
+/* buttons */
+.btn-primary {
+  @apply focus:ring-offset-transparent focus:ring-transparent focus:outline-none border-2 border-black bg-primary text-center rounded-full px-6 py-2 text-white font-serif font-medium transition-all duration-150;
+}
+
+.btn-outlined {
+  @apply focus:ring-offset-transparent focus:ring-transparent focus:outline-none text-center rounded-full px-6 py-2 border-2 border-black float-right text-black font-serif font-medium transition-all duration-150;
+}
+/* end buttons */

@@ -55,7 +55,7 @@ export const dashboardTabs = (isAdmin) =>
           url: "/dashboard/counselling",
         },
         {
-          name: "Welfare",
+          name: "Financial Status",
           url: "/dashboard/welfare",
         },
         {

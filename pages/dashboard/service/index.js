@@ -36,7 +36,7 @@ function Service() {
   const [services, updateServices] = useState([]);
 
   // initial state
-  useEffect(async () => {
+  useEffect(() => {
     firebase.auth().onAuthStateChanged(async (user) => {
       if (user) {
         let db = firebase.firestore();
@@ -81,7 +81,7 @@ function Service() {
 
   return (
     <Layout>
-      <div className="w-full h-full flex flex-col overflow-hidden">
+      <div className="w-full h-full flex flex-col">
         {/* title */}
         <h2 className="text-xl">Services</h2>
         <p className="text-xs font-serif text-gray-500">
@@ -104,7 +104,7 @@ function Service() {
           </>
         ) : (
           <>
-            <div className="grid grid-cols-3 gap-x-6 h-full w-full mt-4">
+            <div className="grid grid-cols-2 2xl:grid-cols-3 gap-x-6 gap-y-4 h-full w-full mt-4">
               {services.map((service, index) => (
                 <Link key={index} href={`/dashboard/service/${service.id}`}>
                   <div className="flex flex-col items-end relative border-none outline-none bg-white transition-all duration-300 rounded-xl hover:shadow hover:bg-opacity-60 max-h-104 cursor-pointer">

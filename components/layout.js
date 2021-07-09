@@ -258,7 +258,7 @@ function Layout({ children }) {
           </div>
 
           {/* body */}
-          <div className="max-w-7xl mx-auto w-full h-full relative px-4 py-6">
+          <div className="max-w-7xl mx-auto w-full h-full min-h-full relative px-4 py-6">
             {children}
           </div>
         </div>

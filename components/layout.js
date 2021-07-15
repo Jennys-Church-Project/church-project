@@ -99,8 +99,6 @@ function Layout({ children }) {
   useEffect(async () => {
     // get current user instance
     firebase.auth().onAuthStateChanged(async (user) => {
-      console.log(user);
-
       if (user) {
         console.log(`signed in as ${user.email}`);
         localStorage.setItem(kUserId, user.uid);
@@ -119,7 +117,6 @@ function Layout({ children }) {
         if (res.status === 200) {
           const member = await res.json();
           setCurrentUser(member);
-          console.log(member);
           localStorage.setItem(kUserType, "member");
           setTabs(dashboardTabs(false));
         } else {
@@ -258,7 +255,7 @@ function Layout({ children }) {
           </div>
 
           {/* body */}
-          <div className="max-w-7xl mx-auto w-full h-full min-h-full relative px-4 py-6">
+          <div className="max-w-6xl 2xl:max-w-7xl mx-auto w-full h-full relative px-4 py-6">
             {children}
           </div>
         </div>

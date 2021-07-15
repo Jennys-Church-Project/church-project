@@ -10,10 +10,7 @@ import firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/firestore";
 import "firebase/storage";
-// import "firebase/analytics";
-// import "firebase/performance";
-// import "firebase/messaging";
-import { faqs, services, speakers } from "../utils/constants";
+// import { faqs, services, speakers } from "../utils/constants";
 
 const clientCredentials = {
   apiKey: "AIzaSyBTjxKJ_mV1ozeehpFm04KR2SN1-C5i2-A",
@@ -39,25 +36,25 @@ export default function init() {
     // firebase.auth().setPersistence(firebase.auth.Auth.Persistence.SESSION);
 
     console.log("firebase was successfully initialized");
-
-    // prepopulate database
-    const speakersCol = firebase.firestore().collection("speakers");
-    const servicesCol = firebase.firestore().collection("services");
-    const faqsCol = firebase.firestore().collection("faqs");
-
-    // prepoluate with all speakers
-    speakers.forEach(async (item) => {
-      await speakersCol.doc(item.id).set(item, { merge: true });
-    });
-
-    // prepoluate with all services
-    services.forEach(async (item) => {
-      await servicesCol.doc(item.id).set(item, { merge: true });
-    });
-
-    // prepopulate with all faqs
-    faqs.forEach(async (item) => {
-      await faqsCol.doc(item.id).set(item, { merge: true });
-    });
   }
 }
+
+// prepopulate database
+// const speakersCol = firebase.firestore().collection("speakers");
+// const servicesCol = firebase.firestore().collection("services");
+// const faqsCol = firebase.firestore().collection("faqs");
+
+// // prepoluate with all speakers
+// speakers.forEach(async (item) => {
+//   await speakersCol.doc(item.id).set(item, { merge: true });
+// });
+
+// // prepoluate with all services
+// services.forEach(async (item) => {
+//   await servicesCol.doc(item.id).set(item, { merge: true });
+// });
+
+// // prepopulate with all faqs
+// faqs.forEach(async (item) => {
+//   await faqsCol.doc(item.id).set(item, { merge: true });
+// });

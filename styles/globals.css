@@ -66,3 +66,9 @@
   @apply focus:ring-offset-transparent focus:ring-transparent focus:outline-none text-center rounded-full px-6 py-2 border-2 border-black float-right text-black font-serif font-medium transition-all duration-150;
 }
 /* end buttons */
+
+/* cards */
+.card {
+  @apply rounded-2xl border border-gray-300;
+}
+/* end cards */

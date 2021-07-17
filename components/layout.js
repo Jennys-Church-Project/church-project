@@ -142,7 +142,7 @@ function Layout({ children }) {
           {/* options */}
           <div className="flex flex-col space-y-3 px-4 my-4">
             {tabs.map((option) => {
-              const active = router.pathname === option.url;
+              const active = router.pathname.startsWith(option.url);
 
               return (
                 <div

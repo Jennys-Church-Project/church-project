@@ -76,7 +76,6 @@ function ServiceItemDetails({ isAdmin, service, speakers }) {
 
   // loading
   const [joining, setJoining] = useState(false);
-  const [loading, setLoading] = useState(false);
 
   // join service state
   const [hasJoinedService, setHasJoinService] = useState(false);
@@ -98,83 +97,85 @@ function ServiceItemDetails({ isAdmin, service, speakers }) {
 
   return (
     <Layout>
-      {loading ? (
-        <div className="flex flex-col items-center justify-center">
-          <Spinner isAbsolute />
-        </div>
-      ) : (
-        <>
-          <div className="w-full max-w-7xl grid grid-cols-3 gap-x-8 h-full">
-            {/* speakers */}
-            <div className="flex flex-col space-y-20 card">
-              {/* banner & active speaker */}
-              <div className="flex flex-col h-1/3 w-full bg-primary rounded-tr-2xl rounded-tl-2xl relative">
-                {/* banner */}
-                <Image
-                  src={service?.banner}
-                  layout="fill"
-                  className="object-cover rounded-tr-2xl rounded-tl-2xl"
-                />
+      <div className="w-full max-w-7xl grid grid-cols-3 gap-x-8 h-full">
+        {/* speakers */}
+        <div className="flex flex-col items-center card">
+          {/* banner & active speaker */}
+          <div className="flex flex-col h-1/3 w-full bg-primary rounded-tr-2xl rounded-tl-2xl relative">
+            {/* banner */}
+            <Image
+              src={service?.banner}
+              layout="fill"
+              className="object-cover rounded-tr-2xl rounded-tl-2xl"
+            />
 
-                {/* active speaker */}
-                <div className="rounded-full h-32 w-32 bg-gray-100 border-8 border-white absolute top-3/4 inset-x-0 mx-auto ">
-                  <Image
-                    src={speakers[0].avatar}
-                    width={128}
-                    height={128}
-                    className="object-cover rounded-full"
-                  />
+            {/* active speaker */}
+            <div className="rounded-full h-32 w-32 bg-gray-100 border-8 border-white absolute top-3/4 inset-x-0 mx-auto ">
+              <Image
+                src={speakers[0].avatar}
+                width={128}
+                height={128}
+                className="object-cover rounded-full"
+              />
+            </div>
+          </div>
+
+          {/* actions */}
+          <div className="mt-20">
+            {isAdmin ? (
+              <div className="flex flex-row space-x-4 px-10 items-center justify-around">
+                {/* edit */}
+                <div className="action-icon">
+                  <FiEdit2 />
+                </div>
+
+                {/* bookmark */}
+                <div
+                  className="action-icon transition-all duration-300"
+                  onClick={() => setBookmarked(!bookmarked)}
+                >
+                  {bookmarked ? <BsBookmarkFill /> : <BsBookmarkPlus />}
+                </div>
+
+                {/* settings */}
+                <div className="action-icon">
+                  <RiSettingsLine />
                 </div>
               </div>
-
-              {/* actions */}
-              {isAdmin ? (
-                <div className="flex flex-row space-x-4 px-10 items-center justify-around">
-                  {/* edit */}
-                  <div className="action-icon">
-                    <FiEdit2 />
-                  </div>
-
-                  {/* bookmark */}
-                  <div
-                    className="action-icon transition-all duration-300"
-                    onClick={() => setBookmarked(!bookmarked)}
-                  >
-                    {bookmarked ? <BsBookmarkFill /> : <BsBookmarkPlus />}
-                  </div>
-
-                  {/* settings */}
-                  <div className="action-icon">
-                    <RiSettingsLine />
-                  </div>
-                </div>
-              ) : joining ? (
-                <>
-                  <Spinner size={8} />
-                </>
-              ) : (
-                <>
-                  {/* join service */}
-                  <button
-                    onClick={joinService}
-                    className={
-                      (hasJoinedService ? "btn-primary" : "btn-outlined") +
-                      "w-2/3 mx-auto btn-outlined"
-                    }
-                  >
-                    <h6 className="">
-                      {hasJoinedService ? "Joined" : "Join now"}
-                    </h6>
-                  </button>
-                </>
-              )}
-            </div>
-
-            {/* service details */}
-            <div className="flex col-span-2 h-full w-full space-y-4 flex-col"></div>
+            ) : joining ? (
+              <>
+                <Spinner size={8} />
+              </>
+            ) : (
+              <>
+                {/* join service */}
+                <button
+                  onClick={joinService}
+                  className={
+                    (hasJoinedService ? "btn-primary" : "btn-outlined") +
+                    "w-2/3 mx-auto btn-outlined"
+                  }
+                >
+                  <h6 className="">
+                    {hasJoinedService ? "Joined" : "Join now"}
+                  </h6>
+                </button>
+              </>
+            )}
           </div>
-        </>
-      )}
+
+          {/* service details */}
+          <h4 className="mt-12 w-4/5 mx-auto">Speakers</h4>
+          <div className="flex flex-col space-y-4 items-start w-4/5 mx-auto mt-4">
+            {service.speakers.map((speaker) => (
+              <UserCard key={speaker.id} speaker={speaker} />
+            ))}
+          </div>
+        </div>
+
+        {/* service details */}
+        <div className="flex col-span-2 h-full w-full space-y-4 flex-col"></div>
+      </div>
     </Layout>
   );
 }

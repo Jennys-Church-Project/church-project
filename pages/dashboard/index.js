@@ -23,21 +23,18 @@ function Dashboard() {
   // load user account details
   useEffect(async () => {
     // get current user instance
-    firebase.auth().onAuthStateChanged(async (user) => {
-      console.log(user);
-      if (user) {
-        router.push("/dashboard/service");
-      }
-    });
+    let user = firebase.auth().currentUser;
+    if (user) router.push("/dashboard/service");
+    else router.push("/");
   }, []);
 
   return (
-    <div className="min-h-screen w-screen overflow-hidden">
+    <div className="h-screen w-screen overflow-hidden">
       <Head>
         <title>{kAppName}</title>
       </Head>
 
-      <Spinner />
+      <Spinner isAbsolute />
     </div>
   );
 }

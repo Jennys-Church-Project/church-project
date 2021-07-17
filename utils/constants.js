@@ -26,6 +26,7 @@ export const services = [
     speakers: ["1", "2", "3"],
     date: "August 6, 2021",
     duration: "7:00pm - 9:30pm",
+    attendants: [],
   },
   {
     id: "bf5de770-1254-4609-9562-ba6476927453",
@@ -36,6 +37,7 @@ export const services = [
     speakers: ["4", "5"],
     date: "August 12, 2021",
     duration: "7:00am - 11:30am",
+    attendants: [],
   },
   {
     id: "143b37c4-f895-400d-9a1b-8a1e8faa5b4f",
@@ -46,6 +48,7 @@ export const services = [
     speakers: ["3", "6"],
     date: "August 18, 2021",
     duration: "6:30pm - 12:30am",
+    attendants: [],
   },
 ];
 

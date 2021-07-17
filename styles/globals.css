@@ -72,3 +72,9 @@
   @apply rounded-2xl border border-gray-300;
 }
 /* end cards */
+
+/* icons */
+.action-icon {
+  @apply border-2 border-gray-200 p-2 cursor-pointer rounded-md text-center text-black;
+}
+/* end icons */

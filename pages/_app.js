@@ -6,7 +6,7 @@
  * Last Modified: Monday, June 28th 2021 4:08:50 pm                            *
  */
 
-import AuthProvider from "../providers/auth.provider";
+// import AuthProvider from "../providers/auth.provider";
 import "../styles/globals.css";
 import firebase from "../firebase/index";
 
@@ -15,9 +15,9 @@ firebase();
 
 function MyApp({ Component, pageProps }) {
   return (
-    <AuthProvider>
-      <Component {...pageProps} />
-    </AuthProvider>
+    // <AuthProvider>
+    <Component {...pageProps} />
+    // </AuthProvider>
   );
 }
 

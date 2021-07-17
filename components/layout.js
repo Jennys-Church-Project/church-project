@@ -19,6 +19,7 @@ import DropDown from "./dropdown";
 // firebase
 import firebase from "firebase/app";
 import "firebase/auth";
+import "firebase/firestore";
 
 // dashboard content
 export const dashboardTabs = (isAdmin) =>
@@ -72,28 +73,15 @@ function Layout({ children }) {
   // router
   const router = useRouter();
 
-  // current page
-  const [currentPage, setCurrentPage] = useState(null);
-
   // tabs
   const [tabs, setTabs] = useState([]);
 
   // current user
-  const [currentUser, setCurrentUser] = useState({
-    first_name: "",
-    middle_name: "",
-    last_name: "",
-    avatar: null,
-    email: "",
-    dob: "",
-    address: "",
-    position: "",
-    contact: "",
-    hometown: "",
-    nationality: "",
-  });
+  const [currentUser, setCurrentUser] = useState(null);
+
   // full name
-  currentUser.fullName = `${currentUser.first_name} ${currentUser.middle_name} ${currentUser.last_name}`;
+  if (currentUser)
+    currentUser.fullName = `${currentUser.first_name} ${currentUser.middle_name} ${currentUser.last_name}`;
 
   // load user account details
   useEffect(async () => {
@@ -123,13 +111,6 @@ function Layout({ children }) {
           console.log("no user account found");
           setTabs(dashboardTabs(true));
         }
-
-        // set current page
-        setCurrentPage({
-          name: tabs[tabs.findIndex((tab) => tab.url === router.pathname)]
-            ?.name,
-          url: tabs[tabs.findIndex((tab) => tab.url === router.pathname)]?.url,
-        });
       } else {
         console.log("user signed out");
         router.push("/");
@@ -160,14 +141,16 @@ function Layout({ children }) {
 
           {/* options */}
           <div className="flex flex-col space-y-3 px-4 my-4">
-            {tabs.map((option, index) => {
-              const active = router.pathname === currentPage?.url;
+            {tabs.map((option) => {
+              const active = router.pathname === option.url;
 
               return (
                 <div
-                  key={index}
+                  key={option.url}
                   onClick={() => router.push(option.url)}
-                  className="flex flex-row space-x-2 cursor-pointer px-4 py-3 items-center"
+                  className={`${
+                    active && "bg-indigo-100 rounded-md"
+                  } flex flex-row space-x-2 cursor-pointer px-4 py-3 items-center`}
                 >
                   <RiDashboardLine
                     className={active ? "text-indigo-600" : "text-gray-800"}
@@ -220,29 +203,29 @@ function Layout({ children }) {
             </div>
 
             {/* full name */}
-            {currentUser.first_name && (
+            {currentUser?.first_name && (
               <div className="pl-4 ml-4 border-l border-gray-300">
                 <p className="text-xs font-semibold cursor-pointer">
-                  {currentUser.fullName}
+                  {currentUser?.fullName}
                 </p>
               </div>
             )}
 
             {/* avatar */}
-            {currentUser.avatar ? (
+            {currentUser?.avatar ? (
               <>
                 <DropDown>
                   <div className="avatar">
                     <Image
                       className="rounded-full"
                       loading="eager"
-                      src={currentUser.avatar}
+                      src={currentUser?.avatar}
                       height={100}
                       width={100}
                       layout="intrinsic"
                       objectFit="cover"
                       objectPosition="center center"
-                      alt={currentUser.fullName}
+                      alt={currentUser?.fullName}
                     />
                   </div>
                 </DropDown>

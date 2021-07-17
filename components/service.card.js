@@ -23,7 +23,7 @@ function ServiceCard({ service }) {
   service.dateMonth = service.date.substr(0, 3);
 
   return (
-    <Link key={service.id} href={`/dashboard/service/${service.id}`}>
+    <Link key={service} href={`/dashboard/service/${service.id}`}>
       <div className="flex flex-col items-end relative border-none outline-none bg-white transition-all duration-300 rounded-xl hover:shadow hover:bg-opacity-60 max-h-104 cursor-pointer">
         {/* date */}
         <div className="absolute top-4 right-4 bg-secondary text-black flex flex-col justify-center items-center rounded-xl px-4 py-1 text-xs font-serif">

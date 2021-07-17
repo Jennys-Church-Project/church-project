@@ -23,62 +23,43 @@ import "firebase/firestore";
 import { kAppName } from "../../../utils/constants";
 import ServiceCard from "../../../components/service.card";
 
-function Service() {
-  // router
-  const router = useRouter();
+// get services
+export async function getStaticProps(context) {
+  let churchSpeakers = [];
+  let services = [];
+  let db = firebase.firestore();
 
-  // loading
-  const [loading, setLoading] = useState(true);
+  // get speakers
+  let { docs } = await db.collection("speakers").get();
 
-  // empty ui
-  const [showEmptyUI, setShowEmptyUI] = useState(false);
+  if (docs) churchSpeakers = docs.map((item) => item.data());
 
-  // services
-  const [services, updateServices] = useState([]);
+  // get services
+  const snapshot = await db.collection("services").get();
+  if (snapshot.docs) {
+    let data = snapshot.docs.map((item) => item.data());
 
-  // initial state
-  useEffect(() => {
-    firebase.auth().onAuthStateChanged(async (user) => {
-      if (user) {
-        let db = firebase.firestore();
-
-        // get speakers
-        let { docs } = await db.collection("speakers").get();
-        let churchSpeakers = [];
-        if (docs) {
-          churchSpeakers = docs.map((item) => item.data());
-        }
-
-        // get services
-        db.collection("services").onSnapshot(
-          async (snapshot) => {
-            if (snapshot.docs) {
-              let data = snapshot.docs.map((item) => item.data());
-
-              // map speakers to actual data
-              data = data.map((item) => {
-                return {
-                  ...item,
-                  speakers: item.speakers.map((id) =>
-                    churchSpeakers.find((person) => person.id === id)
-                  ),
-                };
-              });
-              updateServices(data);
-              setLoading(false);
-              setShowEmptyUI(data.length === 0);
-            }
-          },
-          (error) => {
-            console.error(error);
-            setLoading(false);
-            setShowEmptyUI(true);
-          }
-        );
-      }
+    // map speakers to actual data
+    services = data.map((item) => {
+      return {
+        ...item,
+        speakers: item.speakers.map((id) =>
+          churchSpeakers.find((person) => person.id === id)
+        ),
+      };
     });
-    return null;
-  }, []);
+  }
+
+  return {
+    props: {
+      services,
+    },
+  };
+}
+
+function Service({ services }) {
+  // empty ui
+  const showEmptyUI = !services || services.length === 0;
 
   return (
     <Layout>
@@ -90,9 +71,7 @@ function Service() {
         </p>
 
         {/* programmes */}
-        {loading ? (
-          <Spinner />
-        ) : showEmptyUI ? (
+        {showEmptyUI ? (
           <>
             <div className="flex flex-col items-center justify-center text-center h-full">
               {/* animation */}
@@ -107,7 +86,7 @@ function Service() {
           <>
             <div className="grid grid-cols-2 2xl:grid-cols-3 gap-x-6 gap-y-4 h-full w-full mt-4">
               {services.map((service) => (
-                <ServiceCard service={service} />
+                <ServiceCard key={service.id} service={service} />
               ))}
             </div>
           </>

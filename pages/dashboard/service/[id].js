@@ -1,30 +1,73 @@
-/*
- * File: [id].js                                                               *
- * Project: church-project                                                     *
- * Created Date: Th Jul yyyy                                                   *
- * Author: <<author>                                                           *
- * -----                                                                       *
- * Last Modified: Thu Jul 08 2021                                              *
- * Modified By: Windows 11 User                                                *
- * -----                                                                       *
- * Copyright (c) 2021 Windows 11 User                                          *
- */
-
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import Layout from "../../../components/layout";
 import Spinner from "../../../components/spinner";
+import Image from "next/image";
+import Link from "next/link";
+import { BsBookmarkPlus, BsBookmarkFill } from "react-icons/bs";
+import { FiEdit2 } from "react-icons/fi";
+import { RiSettingsLine } from "react-icons/ri";
 
 // firebase
 import firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/firestore";
-import { services, speakers } from "../../../utils/constants";
+import UserCard from "../../../components/user.card";
 
-// tabs
-export const tabs = ["Overview", "Speakers", "Attendants", "Media"];
+// get paths
+export async function getStaticPaths() {
+  // get all services
+  const db = firebase.firestore();
+  const res = await db.collection("services").get();
 
-function ServiceItemDetails() {
+  // construct paths
+  const paths = res.docs.map((doc) => {
+    return {
+      params: {
+        id: doc.id,
+      },
+    };
+  });
+
+  return {
+    paths,
+    fallback: false,
+  };
+}
+
+// get props
+export async function getStaticProps({ params }) {
+  // get current user
+  const currentUser = firebase.auth().currentUser;
+  console.log(`current user -> ${currentUser?.email}`);
+
+  // url
+  let { id } = params;
+
+  const db = firebase.firestore();
+  const res = await db.doc(`services/${id}`).get();
+  const { docs } = await db.collection(`speakers`).get();
+  let churchSpeakers = [];
+  let currentService;
+  if (docs) churchSpeakers = docs.map((item) => item.data());
+
+  if (res.exists) {
+    currentService = res.data();
+    currentService.speakers = res
+      .data()
+      .speakers.map((id) => churchSpeakers.find((person) => person.id === id));
+  }
+
+  return {
+    props: {
+      isAdmin: currentUser?.email === "admin@church.com",
+      service: currentService,
+      speakers: churchSpeakers,
+    },
+  };
+}
+
+function ServiceItemDetails({ isAdmin, service, speakers }) {
   // router
   const router = useRouter();
 
@@ -32,106 +75,103 @@ function ServiceItemDetails() {
   const { id } = router.query;
 
   // loading
-  // const [loading, setLoading] = useState(true);
+  const [joining, setJoining] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  // service
-  // const [service, setService] = useState(null);
+  // join service state
+  const [hasJoinedService, setHasJoinService] = useState(false);
 
-  // tabs
-  const [activeTab, setActiveTab] = useState(tabs[0]);
+  // bookmark
+  const [bookmarked, setBookmarked] = useState(true);
 
-  // speakers
-  // const [speakers, setSpeakers] = useState([]);
-
-  // useEffect(async () => {
-  //   setLoading(true);
-  //   const db = firebase.firestore();
-  //   const res = await db.doc(`services/${id}`).get();
-  //   const { docs } = await db.collection(`speakers`).get();
-  //   let churchSpeakers = [];
-  //   if (docs) {
-  //     churchSpeakers = docs.map((item) => item.data());
-  //   }
-  //   if (res.exists) {
-  //     let currentService = res.data();
-  //     currentService.speakers = res
-  //       .data()
-  //       .speakers.map((id) =>
-  //         churchSpeakers.find((person) => person.id === id)
-  //       );
-
-  //     // update UI
-  //     setService(currentService);
-  //     setSpeakers(currentService.speakers);
-  //   }
-
-  //   setLoading(service !== null);
-  //   return null;
-  // }, []);
+  const joinService = async () => {
+    // todo -> join service
+    setJoining(true);
+    setTimeout(
+      () => {
+        setHasJoinService(!hasJoinedService);
+        setJoining(false);
+      },
+      hasJoinedService ? 1200 : 350
+    );
+  };
 
   return (
     <Layout>
       {loading ? (
         <div className="flex flex-col items-center justify-center">
-          <Spinner />
+          <Spinner isAbsolute />
         </div>
       ) : (
         <>
           <div className="w-full max-w-7xl grid grid-cols-3 gap-x-8 h-full">
             {/* speakers */}
-            <div className="grid grid-rows-6 gap-y-4">
-              <div className="flex row-span-4 card"></div>
-              <div className="flex row-span-2 card"></div>
+            <div className="flex flex-col space-y-20 card">
+              {/* banner & active speaker */}
+              <div className="flex flex-col h-1/3 w-full bg-primary rounded-tr-2xl rounded-tl-2xl relative">
+                {/* banner */}
+                <Image
+                  src={service?.banner}
+                  layout="fill"
+                  className="object-cover rounded-tr-2xl rounded-tl-2xl"
+                />
+
+                {/* active speaker */}
+                <div className="rounded-full h-32 w-32 bg-gray-100 border-8 border-white absolute top-3/4 inset-x-0 mx-auto ">
+                  <Image
+                    src={speakers[0].avatar}
+                    width={128}
+                    height={128}
+                    className="object-cover rounded-full"
+                  />
+                </div>
+              </div>
+
+              {/* actions */}
+              {isAdmin ? (
+                <div className="flex flex-row space-x-4 px-10 items-center justify-around">
+                  {/* edit */}
+                  <div className="action-icon">
+                    <FiEdit2 />
+                  </div>
+
+                  {/* bookmark */}
+                  <div
+                    className="action-icon transition-all duration-300"
+                    onClick={() => setBookmarked(!bookmarked)}
+                  >
+                    {bookmarked ? <BsBookmarkFill /> : <BsBookmarkPlus />}
+                  </div>
+
+                  {/* settings */}
+                  <div className="action-icon">
+                    <RiSettingsLine />
+                  </div>
+                </div>
+              ) : joining ? (
+                <>
+                  <Spinner size={8} />
+                </>
+              ) : (
+                <>
+                  {/* join service */}
+                  <button
+                    onClick={joinService}
+                    className={
+                      (hasJoinedService ? "btn-primary" : "btn-outlined") +
+                      "w-2/3 mx-auto btn-outlined"
+                    }
+                  >
+                    <h6 className="">
+                      {hasJoinedService ? "Joined" : "Join now"}
+                    </h6>
+                  </button>
+                </>
+              )}
             </div>
 
             {/* service details */}
-            <div className="flex col-span-2 h-full w-full space-y-4 flex-col">
-              {/* tabs container */}
-              <div className="flex w-4/5 py-1 px-2 rounded-2xl flex-row mx-auto bg-gray-100 text-gray-400 items-center justify-between">
-                {tabs.map((tab, index) => {
-                  return (
-                    <div
-                      className={
-                        (activeTab === tab && "bg-white text-black") +
-                        " rounded-2xl cursor-pointer px-8 transition-all duration-300 py-2 text-center"
-                      }
-                      key={index}
-                      onClick={() => setActiveTab(tab)}
-                    >
-                      {tab}
-                    </div>
-                  );
-                })}
-              </div>
-
-              {/* content */}
-              <div className="card">
-                <div className="flex flex-col relative h-full w-full">
-                  {/* lead speaker */}
-                  <img
-                    src={speakers[1].avatar}
-                    alt={speakers[1].name}
-                    className="rounded-full w-32 h-32 absolute top-1/4 left-0 right-0 mx-auto border-4 border-white bg-gray-50 z-10 object-cover"
-                  />
-
-                  {/* banner */}
-                  <img
-                    src={services[0]?.banner}
-                    alt={services[0]?.title}
-                    className="h-1/3 w-full rounded-tr-2xl rounded-tl-2xl object-cover"
-                  />
-
-                  {/* title & description */}
-                  <div className="flex flex-col space-y-2 px-6 py-4 mt-16">
-                    <h4 className="text-2xl lg:text-3xl">
-                      {services[0]?.title}
-                    </h4>
-                    <p className="font-serif">{services[0]?.desc}</p>
-                  </div>
-                </div>
-              </div>
-            </div>
+            <div className="flex col-span-2 h-full w-full space-y-4 flex-col"></div>
           </div>
         </>
       )}

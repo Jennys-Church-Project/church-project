@@ -29,15 +29,17 @@ function AuthProvider({ context, children }) {
     setLoading(true);
     const currentFirebaseUser = firebase.auth().currentUser;
     console.log({ firebaseUser: currentFirebaseUser });
+    if (!currentFirebaseUser) return;
+
     return firebase
       .firestore()
       .collection("members")
-      // TODO -> replace with current user's id
-      .doc("Dpv7egrPwIeiKuveMUxQsNtirI42")
+      .doc(currentFirebaseUser.uid)
       .onSnapshot(
         (snapshot) => {
           setLoading(false);
           if (!snapshot.exists) {
+            console.log("user is not a member");
           } else {
             const user = snapshot.data();
             if (!user) {

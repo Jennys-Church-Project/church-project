@@ -29,7 +29,7 @@ import "firebase/firestore";
 export const dashboardTabs = () => [
   {
     name: "Home",
-    url: "/admin",
+    url: "/admin/home",
     Icon: RiHome5Line,
   },
   {
@@ -84,7 +84,7 @@ function AdminLayout({ children }) {
   return (
     <div className="min-h-screen w-screen overflow-hidden">
       <Head>
-        <title>{}</title>
+        <title>Admin dashboard</title>
       </Head>
       <div className="grid grid-cols-dashboard justify-center bg-gray-50 items-center h-screen">
         {/* sidebar */}

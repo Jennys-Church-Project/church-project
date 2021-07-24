@@ -22,8 +22,10 @@ function Header() {
         {/* logo */}
         <Link href="/">
           <div className="text-left cursor-pointer">
-            <h6 className="text-xs uppercase lg:text-sm font-bold">{kAppName}</h6>
-            <h6 className="text-xs uppercase lg:text-sm ">Church</h6>
+            <h6 className="text-xs uppercase lg:text-sm font-bold">
+              {kAppName}
+            </h6>
+            <h6 className="text-xs uppercase lg:text-sm ">Project</h6>
           </div>
         </Link>
 

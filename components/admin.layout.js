@@ -112,17 +112,17 @@ function AdminLayout({ children }) {
                   key={option.url}
                   onClick={() => router.push(option.url)}
                   className={`${
-                    active && "bg-indigo-100 rounded-md"
+                    active && "bg-gray-100 rounded-md"
                   } flex flex-row space-x-2 cursor-pointer px-4 py-3 items-center`}
                 >
                   <option.Icon
-                    className={active ? "text-indigo-600" : "text-gray-800"}
+                    className={active ? "text-gray-800" : "text-gray-600"}
                   />
                   <h6
                     className={
                       active
-                        ? "text-indigo-600 text-sm font-medium"
-                        : "text-gray-800 text-sm font-medium"
+                        ? "text-gray-800 text-sm font-medium"
+                        : "text-gray-600 text-sm font-medium"
                     }
                   >
                     {option.name}
@@ -179,7 +179,7 @@ function AdminLayout({ children }) {
           </div>
 
           {/* body */}
-          <div className="max-w-6xl 2xl:max-w-7xl mx-auto w-full overflow-auto h-full relative px-4 py-6 bg-gray-100">
+          <div className="max-w-6xl 2xl:max-w-7xl mx-auto w-full overflow-auto h-full relative px-4 py-6">
             {children}
           </div>
         </div>

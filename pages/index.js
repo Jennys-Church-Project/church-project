@@ -33,7 +33,6 @@ export default function Home() {
         console.log(`signed in as ${user.email}`);
         localStorage.setItem(kUserId, user.uid);
         localStorage.setItem(kUserToken, await user.getIdToken());
-        alert(localStorage.getItem(kUserType));
         router.push(
           localStorage.getItem(kUserType) === "member" ? "/dashboard" : "/admin"
         );

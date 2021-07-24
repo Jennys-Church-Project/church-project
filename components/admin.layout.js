@@ -86,7 +86,7 @@ function AdminLayout({ children }) {
       <Head>
         <title>Admin dashboard</title>
       </Head>
-      <div className="grid grid-cols-dashboard justify-center bg-gray-50 items-center h-screen">
+      <div className="grid grid-cols-dashboard justify-center bg-gray-50 items-center min-h-screen">
         {/* sidebar */}
         <div className="z-20 shadow-sm h-full w-full grid grid-rows-sidebar bg-white">
           {/* brand */}
@@ -145,7 +145,7 @@ function AdminLayout({ children }) {
         </div>
 
         {/* content */}
-        <div className="grid grid-rows-dashboard-content h-full w-full">
+        <div className="grid grid-rows-dashboard-content min-h-screen w-full">
           {/* nav bar */}
           <div className="flex items-center justify-end space-x-3 px-6 max-w-7xl mx-auto w-full border-b border-gray-200">
             <div className="flex space-x-4 items-center text-gray-500">
@@ -179,7 +179,7 @@ function AdminLayout({ children }) {
           </div>
 
           {/* body */}
-          <div className="max-w-6xl 2xl:max-w-7xl mx-auto w-full overflow-auto h-full relative px-4 py-6">
+          <div className="max-w-6xl 2xl:max-w-7xl mx-auto w-full overflow-auto h-full relative px-4 py-6 bg-gray-100">
             {children}
           </div>
         </div>

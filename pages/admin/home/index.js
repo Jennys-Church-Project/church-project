@@ -5,7 +5,7 @@ import DashboardHeaderCardItem from "../../../components/dashboard.header.card";
 import { kAppName } from "../../../utils/constants";
 import { RiAccountPinCircleLine } from "react-icons/ri";
 import { BsFillPersonFill } from "react-icons/bs";
-import { GrUserWorker } from "react-icons/gr";
+import { HiUserGroup } from "react-icons/hi";
 import { MdSupervisorAccount } from "react-icons/md";
 import { useState } from "react";
 import Image from "next/image";
@@ -21,21 +21,29 @@ export const headerCards = [
     title: "Users onsite",
     subtitle: "456",
     Icon: RiAccountPinCircleLine,
+    color: "white",
+    background: "black",
   },
   {
     title: "Pastors",
     subtitle: "26",
     Icon: BsFillPersonFill,
+    color: "white",
+    background: "indigo-400",
   },
   {
     title: "Members",
     subtitle: "123",
     Icon: MdSupervisorAccount,
+    color: "white",
+    background: "green-400",
   },
   {
     title: "Other staff",
     subtitle: "98",
-    Icon: GrUserWorker,
+    Icon: HiUserGroup,
+    color: "white",
+    background: "red-400",
   },
 ];
 
@@ -94,6 +102,8 @@ function AdminHome({ members, pastors, other_staff }) {
             <DashboardHeaderCardItem
               title={card.title}
               subtitle={card.subtitle}
+              color={card.color}
+              background={card.background}
               active={activeHeader === card}
               Icon={card.Icon}
               key={card.title}
@@ -111,15 +121,17 @@ function AdminHome({ members, pastors, other_staff }) {
             {members.map((person) => (
               <div
                 key={person.id}
+                onClick={() => alert(person.id)}
                 className="w-full overflow-hidden bg-white h-32 rounded-xl flex flex-col"
               >
                 <div className="flex space-x-2">
                   {/* avatar */}
-                  <div className="w-16 h-16 bg-gray-100 rounded-br-lg">
+                  <div className="w-16 h-16 bg-gray-100 rounded-br-lg overflow-hidden">
                     {person.avatar && (
                       <Image
                         src={person.avatar}
-                        layout="fill"
+                        width={64}
+                        height={64}
                         objectFit="cover"
                       />
                     )}

@@ -82,7 +82,7 @@ function LoginPage() {
     firebase.auth().onAuthStateChanged(async (user) => {
       if (user) {
         console.log(user);
-        localStorage.setItem(kUserType, userType || "member");
+        localStorage.setItem(kUserType, userType);
         router.push(userType === "member" ? "/dashboard" : "/admin");
       }
     });

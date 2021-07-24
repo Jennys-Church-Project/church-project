@@ -14,7 +14,7 @@ import Activities from "../components/activities";
 import Schedule from "../components/schedule";
 import FAQs from "../components/faqs";
 import Footer from "../components/footer";
-import { kAppName, kUserId, kUserToken } from "../utils/constants";
+import { kAppName, kUserId, kUserToken, kUserType } from "../utils/constants";
 
 // firebase
 import firebase from "firebase/app";
@@ -33,7 +33,10 @@ export default function Home() {
         console.log(`signed in as ${user.email}`);
         localStorage.setItem(kUserId, user.uid);
         localStorage.setItem(kUserToken, await user.getIdToken());
-        router.push("/dashboard");
+        alert(localStorage.getItem(kUserType));
+        router.push(
+          localStorage.getItem(kUserType) === "member" ? "/dashboard" : "/admin"
+        );
       }
     });
     return null;

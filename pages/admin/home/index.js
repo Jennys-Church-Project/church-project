@@ -8,11 +8,13 @@ import { BsFillPersonFill } from "react-icons/bs";
 import { GrUserWorker } from "react-icons/gr";
 import { MdSupervisorAccount } from "react-icons/md";
 import { useState } from "react";
+import Image from "next/image";
 
 // firebase
 import firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/firestore";
+import { GiPerspectiveDiceOne } from "react-icons/gi";
 
 export const headerCards = [
   {
@@ -101,8 +103,40 @@ function AdminHome({ members, pastors, other_staff }) {
         </div>
 
         {/* content */}
-        <div className="grid grid-cols-5">
-          <div className="w-full bg-white h-32 rounded-xl"></div>
+        <div className="flex flex-col space-y-2">
+          {/* title */}
+          <h6 className="text-sm text-gray-400">{activeHeader.title}</h6>
+          {/* users */}
+          <div className="grid grid-cols-5">
+            {members.map((person) => (
+              <div
+                key={person.id}
+                className="w-full overflow-hidden bg-white h-32 rounded-xl flex flex-col"
+              >
+                <div className="flex space-x-2">
+                  {/* avatar */}
+                  <div className="w-16 h-16 bg-gray-100 rounded-br-lg">
+                    {person.avatar && (
+                      <Image
+                        src={person.avatar}
+                        layout="fill"
+                        objectFit="cover"
+                      />
+                    )}
+                  </div>
+                  {/* full name */}
+                  <div className="flex flex-col pt-2 flex-1">
+                    <h6 className="text-sm">
+                      {person.first_name} {person.last_name}
+                    </h6>
+                    <p className="text-xs text-gray-600 font-serif">
+                      {person.email}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </AdminLayout>

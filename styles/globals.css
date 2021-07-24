@@ -22,7 +22,7 @@
 }
 
 .avatar {
-  @apply rounded-full w-10 h-10 bg-gray-200 border-2 border-gray-400 cursor-pointer object-cover object-center;
+  @apply rounded-full w-10 h-10 bg-gray-200 border-2 border-gray-400 cursor-pointer object-cover object-center overflow-hidden;
 }
 /* end of images */
 

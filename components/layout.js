@@ -123,13 +123,13 @@ function Layout({ children }) {
       <Head>
         <title>Dashboard</title>
       </Head>
-      <div className="grid grid-cols-dashboard justify-center bg-gray-50 items-center h-screen">
+      <div className="justify-center bg-gray-100 items-center min-h-screen">
         {/* sidebar */}
-        <div className="z-20 shadow-sm h-full w-full grid grid-rows-sidebar bg-white">
+        <div className="z-20 shadow-sm h-full w-3/12 xl:w-1/5 grid grid-rows-sidebar bg-white fixed">
           {/* brand */}
           <div className="flex flex-row items-center justify-center border-b border-gray-300 mx-4">
             {/* app name */}
-            <Link href="/dashboard">
+            <Link href="/admin">
               <div className="text-left cursor-pointer">
                 <h6 className="text-xs uppercase lg:text-sm font-bold">
                   {kAppName}
@@ -141,7 +141,7 @@ function Layout({ children }) {
 
           {/* options */}
           <div className="flex flex-col space-y-3 px-4 my-4">
-            {tabs.map((option) => {
+            {dashboardTabs.map((option) => {
               const active = router.pathname.startsWith(option.url);
 
               return (
@@ -182,63 +182,64 @@ function Layout({ children }) {
         </div>
 
         {/* content */}
-        <div className="grid grid-rows-dashboard-content h-full w-full">
-          {/* nav bar */}
-          <div className="flex items-center justify-end space-x-3 px-6 max-w-7xl mx-auto w-full border-b border-gray-200">
-            <div className="flex space-x-4 items-center text-gray-500">
-              {/* search */}
-              <BiSearchAlt
-                className="cursor-pointer text-xl"
-                onClick={() => router.push("/search")}
-              />
+        <div className="min-h-screen h-full w-9/12 xl:w-4/5 float-right flex-1 flex flex-col">
+          <div className="bg-white z-10 w-full px-4 py-6 border-b border-gray-200 h-24 fixed top-0 inset-x-0">
+            {/* nav bar */}
+            <div className="flex items-center justify-end space-x-3 h-full max-w-6xl 2xl:max-w-7xl mx-auto w-full">
+              <div className="flex space-x-4 items-center text-gray-500">
+                {/* search */}
+                <BiSearchAlt
+                  className="cursor-pointer text-xl"
+                  onClick={() => router.push("/search")}
+                />
 
-              {/* notifications */}
-              <div
-                className="relative"
-                onClick={() => router.push("/notifications")}
-              >
-                <BiBell className="cursor-pointer text-xl" />
-                <div className="rounded-full w-2 h-2 bg-red-400 absolute top-0 right-0"></div>
+                {/* notifications */}
+                <div
+                  className="relative"
+                  onClick={() => router.push("/notifications")}
+                >
+                  <BiBell className="cursor-pointer text-xl" />
+                  <div className="rounded-full w-2 h-2 bg-red-400 absolute top-0 right-0"></div>
+                </div>
               </div>
-            </div>
 
-            {/* full name */}
-            {currentUser?.first_name && (
-              <div className="pl-4 ml-4 border-l border-gray-300">
-                <p className="text-xs font-semibold cursor-pointer">
-                  {currentUser?.fullName}
-                </p>
-              </div>
-            )}
+              {/* full name */}
+              {currentUser?.first_name && (
+                <div className="pl-4 ml-4 border-l border-gray-300">
+                  <p className="text-xs font-semibold cursor-pointer">
+                    {currentUser?.fullName}
+                  </p>
+                </div>
+              )}
 
-            {/* avatar */}
-            {currentUser?.avatar ? (
-              <>
+              {/* avatar */}
+              {currentUser?.avatar ? (
+                <>
+                  <DropDown>
+                    <div className="avatar">
+                      <Image
+                        className="rounded-full"
+                        loading="eager"
+                        src={currentUser?.avatar}
+                        height={100}
+                        width={100}
+                        layout="intrinsic"
+                        objectFit="cover"
+                        objectPosition="center center"
+                        alt={currentUser?.fullName}
+                      />
+                    </div>
+                  </DropDown>
+                </>
+              ) : (
                 <DropDown>
-                  <div className="avatar">
-                    <Image
-                      className="rounded-full"
-                      loading="eager"
-                      src={currentUser?.avatar}
-                      height={100}
-                      width={100}
-                      layout="intrinsic"
-                      objectFit="cover"
-                      objectPosition="center center"
-                      alt={currentUser?.fullName}
-                    />
-                  </div>
+                  <div className="avatar"></div>{" "}
                 </DropDown>
-              </>
-            ) : (
-              <DropDown>
-                <div className="avatar"></div>{" "}
-              </DropDown>
-            )}
+              )}
+            </div>
           </div>
-
           {/* body */}
-          <div className="max-w-6xl 2xl:max-w-7xl mx-auto w-full overflow-auto h-full relative px-4 py-6">
+          <div className="max-w-6xl 2xl:max-w-7xl mx-auto pt-24 flex-1 w-full overflow-auto h-full relative px-4 py-6">
             {children}
           </div>
         </div>

@@ -2,6 +2,7 @@ import { useRouter } from "next/router";
 import AdminLayout from "../../../components/admin.layout";
 import Spinner from "../../../components/spinner";
 import DashboardHeaderCardItem from "../../../components/dashboard.header.card";
+import AdminUserCard from "../../../components/admin.user.card";
 import { kAppName } from "../../../utils/constants";
 import { RiAccountPinCircleLine } from "react-icons/ri";
 import { BsFillPersonFill } from "react-icons/bs";
@@ -13,7 +14,6 @@ import { useEffect, useState } from "react";
 import firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/firestore";
-import AdminUserCard from "../../../components/admin.user.card";
 
 export async function getStaticProps(context) {
   const membersSnapshot = await firebase
@@ -105,7 +105,7 @@ function AdminHome({ members, pastors, other_staff }) {
             {/* title of page */}
             <h2 className="text-3xl">Home</h2>
             <p className="text-sm text-gray-400">
-              Shows a curated list of all registered members of the {kAppName}
+              All registered members of the {kAppName}
             </p>
           </div>
 
@@ -150,27 +150,24 @@ function AdminHome({ members, pastors, other_staff }) {
                   <>
                     {members.map((person) => (
                       <AdminUserCard
-                        person={person}
+                        user={person}
                         key={person.id}
                         color="green-400"
-                        onClick={() => alert(person.id)}
                       />
                     ))}
                     {pastors.map((person) => (
                       <AdminUserCard
-                        person={person}
+                        user={person}
                         key={person.id}
                         color="indigo-400"
                         isSpeaker={true}
-                        onClick={() => alert(person.id)}
                       />
                     ))}
                     {other_staff.map((person) => (
                       <AdminUserCard
-                        person={person}
+                        user={person}
                         key={person.id}
                         color="red-400"
-                        onClick={() => alert(person.id)}
                       />
                     ))}
                   </>
@@ -178,29 +175,26 @@ function AdminHome({ members, pastors, other_staff }) {
                 {activeHeader.Icon === headerCards[1].Icon &&
                   members.map((person) => (
                     <AdminUserCard
-                      person={person}
+                      user={person}
                       key={person.id}
-                      color="green-400"
-                      onClick={() => alert(person.id)}
+                      color="black"
                     />
                   ))}
                 {activeHeader.Icon === headerCards[2].Icon &&
                   pastors.map((person) => (
                     <AdminUserCard
-                      person={person}
+                      user={person}
                       key={person.id}
-                      color="indigo-400"
+                      color="black"
                       isSpeaker={true}
-                      onClick={() => alert(person.id)}
                     />
                   ))}
                 {activeHeader.Icon === headerCards[3].Icon &&
                   other_staff.map((person) => (
                     <AdminUserCard
-                      person={person}
+                      user={person}
                       key={person.id}
-                      color="red-400"
-                      onClick={() => alert(person.id)}
+                      color="black"
                     />
                   ))}
               </div>

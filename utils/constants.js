@@ -13,7 +13,7 @@ export const kUserToken = "user.token";
 export const kUser = "user.data";
 
 // website name
-export const kAppName = "Nexudus";
+export const kAppName = "Pentecostal Church";
 
 // services
 export const services = [
@@ -22,9 +22,11 @@ export const services = [
     title: "Learning the ways of God",
     banner:
       "https://images.unsplash.com/photo-1529070538774-1843cb3265df?ixid=MnwxMjA3fDB8MHxzZWFyY2h8NHx8Y2h1cmNofGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=700&q=60",
-    desc: "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+    desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ullamcorper malesuada proin libero nunc consequat interdum. Eget nunc scelerisque viverra mauris. Faucibus et molestie ac feugiat sed lectus. Sit amet mattis vulputate enim nulla aliquet porttitor. Mauris cursus mattis molestie a iaculis at erat pellentesque adipiscing. Vitae justo eget magna fermentum iaculis eu non diam. Amet consectetur adipiscing elit duis tristique. Integer vitae justo eget magna fermentum iaculis eu non diam. Ac turpis egestas sed tempus urna. Varius morbi enim nunc faucibus a pellentesque sit. Amet mattis vulputate enim nulla aliquet. Tristique senectus et netus et. Interdum velit laoreet id donec ultrices tincidunt arcu non sodales. Feugiat pretium nibh ipsum consequat nisl. Duis ut diam quam nulla. Ultricies mi eget mauris pharetra. Sapien et ligula ullamcorper malesuada proin libero nunc. Vitae suscipit tellus mauris a diam maecenas sed. Sit amet commodo nulla facilisi nullam. Diam ut venenatis tellus in metus vulputate eu scelerisque. Etiam dignissim diam quis enim lobortis scelerisque fermentum. Cras sed felis eget velit aliquet. Sed tempus urna et pharetra. Maecenas sed enim ut sem viverra aliquet eget. Neque laoreet suspendisse interdum consectetur libero id faucibus. Auctor elit sed vulputate mi. Nulla facilisi morbi tempus iaculis. Posuere morbi leo urna molestie at. Elementum eu facilisis sed odio morbi quis commodo odio. Venenatis cras sed felis eget velit aliquet sagittis. Sit amet cursus sit amet. Duis tristique sollicitudin nibh sit amet. Dignissim diam quis enim lobortis scelerisque fermentum dui faucibus. Risus quis varius quam quisque id diam vel. Suspendisse in est ante in nibh mauris cursus mattis molestie. Consectetur purus ut faucibus pulvinar elementum.",
     speakers: ["1", "2", "3"],
     date: "August 6, 2021",
+    stream_url:
+      "https://iframe.dacast.com/live/b198df86-2a0d-49e3-c6b0-1a1733908421/0e9a26e2-457c-d9d7-2244-4a062d9664f6",
     duration: "7:00pm - 9:30pm",
     attendants: [],
   },
@@ -33,9 +35,11 @@ export const services = [
     title: "Power in the Word of God",
     banner:
       "https://images.unsplash.com/photo-1499652848871-1527a310b13a?ixid=MnwxMjA3fDB8MHxzZWFyY2h8N3x8Y2h1cmNofGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=700&q=60",
-    desc: "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+    desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ullamcorper malesuada proin libero nunc consequat interdum. Eget nunc scelerisque viverra mauris. Faucibus et molestie ac feugiat sed lectus. Sit amet mattis vulputate enim nulla aliquet porttitor. Mauris cursus mattis molestie a iaculis at erat pellentesque adipiscing. Vitae justo eget magna fermentum iaculis eu non diam. Amet consectetur adipiscing elit duis tristique. Integer vitae justo eget magna fermentum iaculis eu non diam. Ac turpis egestas sed tempus urna. Varius morbi enim nunc faucibus a pellentesque sit. Amet mattis vulputate enim nulla aliquet. Tristique senectus et netus et. Interdum velit laoreet id donec ultrices tincidunt arcu non sodales. Feugiat pretium nibh ipsum consequat nisl. Duis ut diam quam nulla. Ultricies mi eget mauris pharetra. Sapien et ligula ullamcorper malesuada proin libero nunc. Vitae suscipit tellus mauris a diam maecenas sed. Sit amet commodo nulla facilisi nullam. Diam ut venenatis tellus in metus vulputate eu scelerisque. Etiam dignissim diam quis enim lobortis scelerisque fermentum. Cras sed felis eget velit aliquet. Sed tempus urna et pharetra. Maecenas sed enim ut sem viverra aliquet eget. Neque laoreet suspendisse interdum consectetur libero id faucibus. Auctor elit sed vulputate mi. Nulla facilisi morbi tempus iaculis. Posuere morbi leo urna molestie at. Elementum eu facilisis sed odio morbi quis commodo odio. Venenatis cras sed felis eget velit aliquet sagittis. Sit amet cursus sit amet. Duis tristique sollicitudin nibh sit amet. Dignissim diam quis enim lobortis scelerisque fermentum dui faucibus. Risus quis varius quam quisque id diam vel. Suspendisse in est ante in nibh mauris cursus mattis molestie. Consectetur purus ut faucibus pulvinar elementum.",
     speakers: ["4", "5"],
     date: "August 12, 2021",
+    stream_url:
+      "https://iframe.dacast.com/live/b198df86-2a0d-49e3-c6b0-1a1733908421/0e9a26e2-457c-d9d7-2244-4a062d9664f6",
     duration: "7:00am - 11:30am",
     attendants: [],
   },
@@ -44,9 +48,11 @@ export const services = [
     title: "The Last Supper: Its Essence",
     banner:
       "https://images.unsplash.com/photo-1520629716099-d147346eb224?ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTZ8fGNodXJjaHxlbnwwfHwwfHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=700&q=60",
-    desc: "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+    desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ullamcorper malesuada proin libero nunc consequat interdum. Eget nunc scelerisque viverra mauris. Faucibus et molestie ac feugiat sed lectus. Sit amet mattis vulputate enim nulla aliquet porttitor. Mauris cursus mattis molestie a iaculis at erat pellentesque adipiscing. Vitae justo eget magna fermentum iaculis eu non diam. Amet consectetur adipiscing elit duis tristique. Integer vitae justo eget magna fermentum iaculis eu non diam. Ac turpis egestas sed tempus urna. Varius morbi enim nunc faucibus a pellentesque sit. Amet mattis vulputate enim nulla aliquet. Tristique senectus et netus et. Interdum velit laoreet id donec ultrices tincidunt arcu non sodales. Feugiat pretium nibh ipsum consequat nisl. Duis ut diam quam nulla. Ultricies mi eget mauris pharetra. Sapien et ligula ullamcorper malesuada proin libero nunc. Vitae suscipit tellus mauris a diam maecenas sed. Sit amet commodo nulla facilisi nullam. Diam ut venenatis tellus in metus vulputate eu scelerisque. Etiam dignissim diam quis enim lobortis scelerisque fermentum. Cras sed felis eget velit aliquet. Sed tempus urna et pharetra. Maecenas sed enim ut sem viverra aliquet eget. Neque laoreet suspendisse interdum consectetur libero id faucibus. Auctor elit sed vulputate mi. Nulla facilisi morbi tempus iaculis. Posuere morbi leo urna molestie at. Elementum eu facilisis sed odio morbi quis commodo odio. Venenatis cras sed felis eget velit aliquet sagittis. Sit amet cursus sit amet. Duis tristique sollicitudin nibh sit amet. Dignissim diam quis enim lobortis scelerisque fermentum dui faucibus. Risus quis varius quam quisque id diam vel. Suspendisse in est ante in nibh mauris cursus mattis molestie. Consectetur purus ut faucibus pulvinar elementum.",
     speakers: ["3", "6"],
     date: "August 18, 2021",
+    stream_url:
+      "https://iframe.dacast.com/live/b198df86-2a0d-49e3-c6b0-1a1733908421/0e9a26e2-457c-d9d7-2244-4a062d9664f6",
     duration: "6:30pm - 12:30am",
     attendants: [],
   },

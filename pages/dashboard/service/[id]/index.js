@@ -58,8 +58,6 @@ export async function getStaticProps({ params }) {
       .speakers.map((id) => churchSpeakers.find((person) => person.id === id));
   }
 
-  console.log(`all speakers [${churchSpeakers}]`);
-
   return {
     props: {
       isAdmin: currentUser?.email === "admin@church.com",
@@ -94,6 +92,15 @@ function ServiceItemDetails({ isAdmin, service, speakers }) {
     } else {
       // todo -> join service
       setJoining(true);
+      let currentUser = firebase.auth().currentUser;
+      if (currentUser) {
+        service.attendants.push(currentUser.uid);
+        await firebase
+          .firestore()
+          .doc(`services/${service.id}`)
+          .set(service, { merge: true });
+      }
+
       setTimeout(
         () => {
           setHasJoinService(!hasJoinedService);
@@ -114,9 +121,9 @@ function ServiceItemDetails({ isAdmin, service, speakers }) {
       {service === null || activeSpeaker === null ? (
         <Spinner isAbsolute />
       ) : (
-        <div className="w-full max-w-7xl grid grid-cols-3 gap-x-8 h-full">
+        <div className="w-full max-w-7xl grid grid-cols-2 xl:grid-cols-3 gap-x-8 h-full">
           {/* speakers */}
-          <div className="flex flex-col items-center card">
+          <div className="flex flex-col items-center card pb-4">
             {/* banner & active speaker */}
             <div className="flex flex-col h-1/3 w-full bg-primary rounded-tr-2xl rounded-tl-2xl relative">
               {/* banner */}
@@ -179,13 +186,9 @@ function ServiceItemDetails({ isAdmin, service, speakers }) {
                     }
                     "w-2/3 mx-auto"`}
                   >
-                    <h6 className="">
-                      {service.isOngoing
-                        ? "Watch livestream"
-                        : hasJoinedService
-                        ? "Joined"
-                        : "Join now"}
-                    </h6>
+                    {service.stream_url && (
+                      <h6 className="">Watch livestream</h6>
+                    )}
                   </button>
                 </>
               )}
@@ -207,11 +210,15 @@ function ServiceItemDetails({ isAdmin, service, speakers }) {
           </div>
 
           {/* service details */}
-          <div className="flex col-span-2 h-full w-full space-y-4 flex-col">
-            <h1 className="text-3xl 2xl:text-4xl">{service.title}</h1>
-            <p className="text-sm 2xl:text-base font-light font-serif">
-              {service.desc}
-            </p>
+          <div className="flex xl:col-span-2 h-full w-full flex-col px-8">
+            <h6 className="text-indigo-700 font-semibold">{service.date}</h6>
+            <h1 className="text-3xl 2xl:text-4xl mt-1">{service.title}</h1>
+            <div className="mt-2 flex items-center text-sm space-x-2">
+              <p className="text-gray-400">Between:</p>
+
+              <p className="text-indigo-700">{service.duration}</p>
+            </div>
+            <p className="text-sm font-light font-serif mt-8">{service.desc}</p>
           </div>
         </div>
       )}

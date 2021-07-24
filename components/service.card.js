@@ -57,7 +57,7 @@ function ServiceCard({ service }) {
             </div>
 
             {/* description */}
-            <p className="text-xs text-black text-opacity-50 font-serif">
+            <p className="text-xs text-black text-opacity-50 font-serif line-clamp-3 w-full">
               {service.desc}
             </p>
 

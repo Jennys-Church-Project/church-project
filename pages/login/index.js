@@ -13,6 +13,7 @@ import { useEffect, useState } from "react";
 import { toast, ToastContainer } from "react-nextjs-toast";
 import { FaFacebookF, FaTwitter, FaInstagram } from "react-icons/fa";
 import { RiAdminLine } from "react-icons/ri";
+import { BiLeftArrow } from "react-icons/bi";
 import { MdSupervisorAccount } from "react-icons/md";
 
 // firebase
@@ -36,7 +37,6 @@ export const accountTypes = [
 function LoginPage() {
   // auth state
   const [loading, setLoading] = useState(false);
-  const [validForm, setValidForm] = useState(false);
   const [userType, setUserType] = useState(null);
   const [showLogin, setShowLogin] = useState(false);
 
@@ -51,22 +51,30 @@ function LoginPage() {
     const email = e.target.email.value;
     const password = e.target.password.value;
 
-    const { user } = await firebase
-      .auth()
-      .signInWithEmailAndPassword(email, password);
+    try {
+      const { user } = await firebase
+        .auth()
+        .signInWithEmailAndPassword(email, password);
 
-    // toggle loading indicator
-    setLoading(false);
+      // toggle loading indicator
+      setLoading(false);
 
-    if (!user) {
-      // toast
-      toast.notify("Unable to sign in", {
+      if (!user) {
+        // toast
+        toast.notify("Unable to sign in", {
+          duration: 5,
+          type: "error",
+        });
+      } else {
+        // reset all fields
+        e.target.reset();
+      }
+    } catch (error) {
+      setLoading(false);
+      toast.notify("Account not found for this email address", {
         duration: 5,
         type: "error",
       });
-    } else {
-      // reset all fields
-      e.target.reset();
     }
   };
 
@@ -75,7 +83,7 @@ function LoginPage() {
       if (user) {
         console.log(user);
         localStorage.setItem(kUserType, userType || "member");
-        router.push("/dashboard");
+        router.push(userType === "member" ? "/dashboard" : "/admin");
       }
     });
     return null;
@@ -98,7 +106,16 @@ function LoginPage() {
         <div className="col-span-6 bg-gray-100 rounded-tl-3xl rounded-bl-3xl">
           <div className=" grid grid-rows-auth h-full w-full max-w-4xl mx-auto">
             {/* top */}
-            <div className="flex flex-row justify-end px-8 items-center w-full">
+            <div className="flex flex-row justify-between px-8 items-center w-full">
+              {showLogin && (
+                <div
+                  className="flex flex-row items-center space-x-2 cursor-pointer"
+                  onClick={() => setShowLogin(!showLogin)}
+                >
+                  <BiLeftArrow />
+                  <h6>Choose account type</h6>
+                </div>
+              )}
               {/* sign up */}
               <button
                 className="btn-outlined"
@@ -156,7 +173,6 @@ function LoginPage() {
                         {/* login button */}
                         <button
                           type="submit"
-                          onClick={validForm ? login : null}
                           className={`${
                             loading ? "btn-outlined" : "btn-primary"
                           } w-full`}

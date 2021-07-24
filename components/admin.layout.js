@@ -12,8 +12,12 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { kAppName, kUserId, kUserToken, kUserType } from "../utils/constants";
-import { BiSearchAlt, BiBell } from "react-icons/bi";
-import { RiDashboardLine } from "react-icons/ri";
+import { BiSearchAlt, BiBell, BiChurch } from "react-icons/bi";
+import { BsPeople } from "react-icons/bs";
+import { GiLifeSupport } from "react-icons/gi";
+import { FaMoneyCheck } from "react-icons/fa";
+import { FiHelpCircle } from "react-icons/fi";
+import { RiDashboardLine, RiHome5Line } from "react-icons/ri";
 import DropDown from "./dropdown";
 
 // firebase
@@ -22,66 +26,45 @@ import "firebase/auth";
 import "firebase/firestore";
 
 // dashboard content
-export const dashboardTabs = (isAdmin) =>
-  isAdmin
-    ? [
-        {
-          name: "Service",
-          url: "/dashboard/service",
-        },
-        {
-          name: "Youth Meetings",
-          url: "/dashboard/youth-meetings",
-        },
-        {
-          name: "Leaders Meetings",
-          url: "/dashboard/leaders-meetings",
-        },
-      ]
-    : [
-        {
-          name: "Service",
-          url: "/dashboard/service",
-        },
-        {
-          name: "Youth Meetings",
-          url: "/dashboard/youth-meetings",
-        },
-        {
-          name: "Leaders Meetings",
-          url: "/dashboard/leaders-meetings",
-        },
-        {
-          name: "Counselling",
-          url: "/dashboard/counselling",
-        },
-        {
-          name: "Financial Status",
-          url: "/dashboard/welfare",
-        },
-        {
-          name: "Account Settings",
-          url: "/dashboard/account",
-        },
-        {
-          name: "Support",
-          url: "/dashboard/support",
-        },
-      ];
+export const dashboardTabs = () => [
+  {
+    name: "Home",
+    url: "/admin",
+    Icon: RiHome5Line,
+  },
+  {
+    name: "Meetings management",
+    url: "/admin/meetings",
+    Icon: BsPeople,
+  },
+  {
+    name: "Service management",
+    url: "/admin/service",
+    Icon: BiChurch,
+  },
+  {
+    name: "Counselling",
+    url: "/admin/counselling",
+    Icon: GiLifeSupport,
+  },
+  {
+    name: "Financial Status",
+    url: "/admin/finance",
+    Icon: FaMoneyCheck,
+  },
+  {
+    name: "Support",
+    url: "/admin/support",
+    Icon: FiHelpCircle,
+  },
+];
 
-function Layout({ children }) {
+function AdminLayout({ children }) {
   // router
   const router = useRouter();
 
   // tabs
-  const [tabs, setTabs] = useState([]);
-
-  // current user
-  const [currentUser, setCurrentUser] = useState(null);
-
-  // full name
-  if (currentUser)
-    currentUser.fullName = `${currentUser.first_name} ${currentUser.middle_name} ${currentUser.last_name}`;
+  const [tabs, setTabs] = useState(dashboardTabs());
 
   // load user account details
   useEffect(async () => {
@@ -91,26 +74,6 @@ function Layout({ children }) {
         console.log(`signed in as ${user.email}`);
         localStorage.setItem(kUserId, user.uid);
         localStorage.setItem(kUserToken, await user.getIdToken());
-
-        const res = await fetch("/api/member", {
-          body: JSON.stringify({
-            uid: localStorage.getItem(kUserId),
-            isMember: localStorage.getItem(kUserType) === "member",
-          }),
-          headers: {
-            "Content-Type": "application/json",
-          },
-          method: "POST",
-        });
-        if (res.status === 200) {
-          const member = await res.json();
-          setCurrentUser(member);
-          localStorage.setItem(kUserType, "member");
-          setTabs(dashboardTabs(false));
-        } else {
-          console.log("no user account found");
-          setTabs(dashboardTabs(true));
-        }
       } else {
         console.log("user signed out");
         router.push("/");
@@ -121,7 +84,7 @@ function Layout({ children }) {
   return (
     <div className="min-h-screen w-screen overflow-hidden">
       <Head>
-        <title>Dashboard</title>
+        <title>{}</title>
       </Head>
       <div className="grid grid-cols-dashboard justify-center bg-gray-50 items-center h-screen">
         {/* sidebar */}
@@ -129,7 +92,7 @@ function Layout({ children }) {
           {/* brand */}
           <div className="flex flex-row items-center justify-center border-b border-gray-300 mx-4">
             {/* app name */}
-            <Link href="/dashboard">
+            <Link href="/admin">
               <div className="text-left cursor-pointer">
                 <h6 className="text-xs uppercase lg:text-sm font-bold">
                   {kAppName}
@@ -152,7 +115,7 @@ function Layout({ children }) {
                     active && "bg-indigo-100 rounded-md"
                   } flex flex-row space-x-2 cursor-pointer px-4 py-3 items-center`}
                 >
-                  <RiDashboardLine
+                  <option.Icon
                     className={active ? "text-indigo-600" : "text-gray-800"}
                   />
                   <h6
@@ -203,38 +166,16 @@ function Layout({ children }) {
             </div>
 
             {/* full name */}
-            {currentUser?.first_name && (
-              <div className="pl-4 ml-4 border-l border-gray-300">
-                <p className="text-xs font-semibold cursor-pointer">
-                  {currentUser?.fullName}
-                </p>
-              </div>
-            )}
+            <div className="pl-4 ml-4 border-l border-gray-300">
+              <p className="text-xs font-semibold cursor-pointer">
+                Church administrator
+              </p>
+            </div>
 
             {/* avatar */}
-            {currentUser?.avatar ? (
-              <>
-                <DropDown>
-                  <div className="avatar">
-                    <Image
-                      className="rounded-full"
-                      loading="eager"
-                      src={currentUser?.avatar}
-                      height={100}
-                      width={100}
-                      layout="intrinsic"
-                      objectFit="cover"
-                      objectPosition="center center"
-                      alt={currentUser?.fullName}
-                    />
-                  </div>
-                </DropDown>
-              </>
-            ) : (
-              <DropDown>
-                <div className="avatar"></div>{" "}
-              </DropDown>
-            )}
+            <DropDown>
+              <div className="avatar"></div>
+            </DropDown>
           </div>
 
           {/* body */}
@@ -247,4 +188,4 @@ function Layout({ children }) {
   );
 }
 
-export default Layout;
+export default AdminLayout;

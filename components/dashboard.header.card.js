@@ -16,7 +16,7 @@ function DashboardHeaderCardItem({
         active
           ? `text-${color} bg-${background}`
           : `text-${background} bg-${color}`
-      } w-full overflow-hidden px-6 py-4 hover:shadow-lg shadow-sm transition-all duration-200 space-y-4 rounded-xl relative cursor-pointer flex flex-col`}
+      } w-full overflow-hidden px-6 py-4 hover:shadow-lg shadow-sm transition-all duration-200 space-y-8 rounded-xl relative cursor-pointer flex flex-col`}
     >
       <div className="flex flex-row items-center space-x-1 text-base">
         <Icon className={`${active ? `text-${color}` : "text-gray-600"}`} />

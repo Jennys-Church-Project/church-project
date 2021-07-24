@@ -16,24 +16,36 @@ import "firebase/firestore";
 import AdminUserCard from "../../../components/admin.user.card";
 
 export async function getStaticProps(context) {
-  const { docs } = await firebase
+  const membersSnapshot = await firebase
     .firestore()
     .collection("members")
     .orderBy("created_at", "desc")
     .get();
+  const speakersSnapshot = await firebase
+    .firestore()
+    .collection("speakers")
+    .get();
   let members = [];
-  if (docs) {
-    docs
-      .map((doc) => {
-        return { ...doc.data(), created_at: Date.now().toLocaleString() };
-      })
-      .forEach((item) => members.push(item));
+  let pastors = [];
+  let otherStaff = [];
+  if (membersSnapshot.docs) {
+    membersSnapshot.docs
+      .map((doc) => doc.data())
+      .forEach((item) =>
+        item.position === "Member" ? members.push(item) : otherStaff.push(item)
+      );
+  }
+
+  if (speakersSnapshot.docs) {
+    speakersSnapshot.docs
+      .map((doc) => doc.data())
+      .forEach((item) => pastors.push(item));
   }
   return {
     props: {
       members,
-      pastors: [],
-      other_staff: [],
+      pastors,
+      other_staff: otherStaff,
     },
   };
 }
@@ -57,18 +69,18 @@ function AdminHome({ members, pastors, other_staff }) {
         background: "black",
       },
       {
-        title: "Pastors",
-        subtitle: `${pastors.length}`,
-        Icon: BsFillPersonFill,
-        color: "white",
-        background: "indigo-400",
-      },
-      {
         title: "Members",
         subtitle: `${members.length}`,
         Icon: MdSupervisorAccount,
         color: "white",
         background: "green-400",
+      },
+      {
+        title: "Pastors",
+        subtitle: `${pastors.length}`,
+        Icon: BsFillPersonFill,
+        color: "white",
+        background: "indigo-400",
       },
       {
         title: "Other staff",
@@ -107,7 +119,7 @@ function AdminHome({ members, pastors, other_staff }) {
         </div>
 
         {/* data cards */}
-        <div className="grid md:grid-cols-3 lg:grid-cols-4 gap-x-6">
+        <div className="grid md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-x-6 gap-y-4">
           {headerCards.map((card) => (
             <DashboardHeaderCardItem
               title={card.title}
@@ -133,14 +145,64 @@ function AdminHome({ members, pastors, other_staff }) {
               {/* title */}
               <h6 className="text-lg text-gray-600">{activeHeader.title}</h6>
               {/* users */}
-              <div className="grid grid-cols-4 gap-x-4 gap-y-8">
-                {members.map((person) => (
-                  <AdminUserCard
-                    person={person}
-                    key={person.id}
-                    onClick={() => alert(person.id)}
-                  />
-                ))}
+              <div className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-4 gap-y-8">
+                {activeHeader.Icon === headerCards[0].Icon && (
+                  <>
+                    {members.map((person) => (
+                      <AdminUserCard
+                        person={person}
+                        key={person.id}
+                        color="green-400"
+                        onClick={() => alert(person.id)}
+                      />
+                    ))}
+                    {pastors.map((person) => (
+                      <AdminUserCard
+                        person={person}
+                        key={person.id}
+                        color="indigo-400"
+                        isSpeaker={true}
+                        onClick={() => alert(person.id)}
+                      />
+                    ))}
+                    {other_staff.map((person) => (
+                      <AdminUserCard
+                        person={person}
+                        key={person.id}
+                        color="red-400"
+                        onClick={() => alert(person.id)}
+                      />
+                    ))}
+                  </>
+                )}
+                {activeHeader.Icon === headerCards[1].Icon &&
+                  members.map((person) => (
+                    <AdminUserCard
+                      person={person}
+                      key={person.id}
+                      color="green-400"
+                      onClick={() => alert(person.id)}
+                    />
+                  ))}
+                {activeHeader.Icon === headerCards[2].Icon &&
+                  pastors.map((person) => (
+                    <AdminUserCard
+                      person={person}
+                      key={person.id}
+                      color="indigo-400"
+                      isSpeaker={true}
+                      onClick={() => alert(person.id)}
+                    />
+                  ))}
+                {activeHeader.Icon === headerCards[3].Icon &&
+                  other_staff.map((person) => (
+                    <AdminUserCard
+                      person={person}
+                      key={person.id}
+                      color="red-400"
+                      onClick={() => alert(person.id)}
+                    />
+                  ))}
               </div>
             </div>
           </>

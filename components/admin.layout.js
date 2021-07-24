@@ -8,16 +8,15 @@
 
 import Head from "next/head";
 import Link from "next/link";
-import Image from "next/image";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { kAppName, kUserId, kUserToken, kUserType } from "../utils/constants";
+import { kAppName, kUserId, kUserToken } from "../utils/constants";
 import { BiSearchAlt, BiBell, BiChurch } from "react-icons/bi";
 import { BsPeople } from "react-icons/bs";
 import { GiLifeSupport } from "react-icons/gi";
 import { FaMoneyCheck } from "react-icons/fa";
 import { FiHelpCircle } from "react-icons/fi";
-import { RiDashboardLine, RiHome5Line } from "react-icons/ri";
+import { RiHome5Line } from "react-icons/ri";
 import DropDown from "./dropdown";
 
 // firebase
@@ -26,7 +25,7 @@ import "firebase/auth";
 import "firebase/firestore";
 
 // dashboard content
-export const dashboardTabs = () => [
+export const dashboardTabs = [
   {
     name: "Home",
     url: "/admin/home",
@@ -63,9 +62,6 @@ function AdminLayout({ children }) {
   // router
   const router = useRouter();
 
-  // tabs
-  const [tabs, setTabs] = useState(dashboardTabs());
-
   // load user account details
   useEffect(async () => {
     // get current user instance
@@ -86,9 +82,9 @@ function AdminLayout({ children }) {
       <Head>
         <title>Admin dashboard</title>
       </Head>
-      <div className="grid grid-cols-dashboard justify-center bg-gray-50 items-center min-h-screen">
+      <div className="justify-center bg-gray-100 items-center min-h-screen">
         {/* sidebar */}
-        <div className="z-20 shadow-sm h-full w-full grid grid-rows-sidebar bg-white">
+        <div className="z-20 shadow-sm h-full w-3/12 xl:w-1/5 grid grid-rows-sidebar bg-white fixed">
           {/* brand */}
           <div className="flex flex-row items-center justify-center border-b border-gray-300 mx-4">
             {/* app name */}
@@ -104,7 +100,7 @@ function AdminLayout({ children }) {
 
           {/* options */}
           <div className="flex flex-col space-y-3 px-4 my-4">
-            {tabs.map((option) => {
+            {dashboardTabs.map((option) => {
               const active = router.pathname.startsWith(option.url);
 
               return (
@@ -145,41 +141,42 @@ function AdminLayout({ children }) {
         </div>
 
         {/* content */}
-        <div className="grid grid-rows-dashboard-content min-h-screen w-full">
-          {/* nav bar */}
-          <div className="flex items-center justify-end space-x-3 px-6 max-w-7xl mx-auto w-full border-b border-gray-200">
-            <div className="flex space-x-4 items-center text-gray-500">
-              {/* search */}
-              <BiSearchAlt
-                className="cursor-pointer text-xl"
-                onClick={() => router.push("/search")}
-              />
+        <div className="min-h-screen h-full w-9/12 xl:w-4/5 float-right flex-1 flex flex-col">
+          <div className="z-10 bg-white max-w-6xl 2xl:max-w-7xl mx-auto w-full px-4 py-6 border-b border-gray-200 h-24 fixed top-0 inset-x-0">
+            {/* nav bar */}
+            <div className="flex items-center justify-end space-x-3 h-full w-full">
+              <div className="flex space-x-4 items-center text-gray-500">
+                {/* search */}
+                <BiSearchAlt
+                  className="cursor-pointer text-xl"
+                  onClick={() => router.push("/search")}
+                />
 
-              {/* notifications */}
-              <div
-                className="relative"
-                onClick={() => router.push("/notifications")}
-              >
-                <BiBell className="cursor-pointer text-xl" />
-                <div className="rounded-full w-2 h-2 bg-red-400 absolute top-0 right-0"></div>
+                {/* notifications */}
+                <div
+                  className="relative"
+                  onClick={() => router.push("/notifications")}
+                >
+                  <BiBell className="cursor-pointer text-xl" />
+                  <div className="rounded-full w-2 h-2 bg-red-400 absolute top-0 right-0"></div>
+                </div>
               </div>
-            </div>
 
-            {/* full name */}
-            <div className="pl-4 ml-4 border-l border-gray-300">
-              <p className="text-xs font-semibold cursor-pointer">
-                Church administrator
-              </p>
-            </div>
+              {/* full name */}
+              <div className="pl-4 ml-4 border-l border-gray-300">
+                <p className="text-xs font-semibold cursor-pointer">
+                  Church administrator
+                </p>
+              </div>
 
-            {/* avatar */}
-            <DropDown>
-              <div className="avatar"></div>
-            </DropDown>
+              {/* avatar */}
+              <DropDown>
+                <div className="avatar"></div>
+              </DropDown>
+            </div>
           </div>
-
           {/* body */}
-          <div className="max-w-6xl 2xl:max-w-7xl mx-auto w-full overflow-auto h-full relative px-4 py-6">
+          <div className="max-w-6xl 2xl:max-w-7xl mx-auto mt-24 flex-1 w-full overflow-auto h-full relative px-4 py-6">
             {children}
           </div>
         </div>

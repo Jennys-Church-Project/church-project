@@ -15,12 +15,6 @@ import { toast, ToastContainer } from "react-nextjs-toast";
 
 function RegisterAccount() {
   const [loading, setLoading] = useState(false);
-  const [validForm, setValidForm] = useState(false);
-
-  const handleInputChange = (e) => {
-    const name = e.target.value;
-    // TODO -> perform input validation
-  };
 
   const createMember = async (e) => {
     e.preventDefault();
@@ -41,7 +35,7 @@ function RegisterAccount() {
         email: e.target.email.value,
         middle_name: e.target.middle_name.value,
         password: e.target.password.value,
-        avatar: '',
+        avatar: "",
         dob: e.target.dob.value,
         address: e.target.address.value,
         position: e.target.position.value,
@@ -120,7 +114,6 @@ function RegisterAccount() {
                       type="text"
                       placeholder="e.g. John"
                       name="first_name"
-                      onChange={handleInputChange}
                       required
                     />
                   </div>
@@ -132,7 +125,6 @@ function RegisterAccount() {
                       type="text"
                       placeholder="e.g. Doe"
                       name="last_name"
-                      onChange={handleInputChange}
                       required
                     />
                   </div>
@@ -144,7 +136,6 @@ function RegisterAccount() {
                       type="text"
                       placeholder="e.g. Alex"
                       name="middle_name"
-                      onChange={handleInputChange}
                     />
                   </div>
                 </div>
@@ -158,7 +149,6 @@ function RegisterAccount() {
                       type="email"
                       placeholder="e.g. john.doe@mail.com"
                       name="email"
-                      onChange={handleInputChange}
                       required
                     />
                   </div>
@@ -170,7 +160,6 @@ function RegisterAccount() {
                       type="number"
                       placeholder="e.g. 05541234569"
                       name="contact"
-                      onChange={handleInputChange}
                     />
                   </div>
                 </div>
@@ -184,7 +173,6 @@ function RegisterAccount() {
                       type="text"
                       placeholder="e.g. Accra Central"
                       name="hometown"
-                      onChange={handleInputChange}
                     />
                   </div>
 
@@ -195,7 +183,6 @@ function RegisterAccount() {
                       type="text"
                       placeholder="e.g. 23/08/1993"
                       name="dob"
-                      onChange={handleInputChange}
                       required
                     />
                   </div>
@@ -208,7 +195,7 @@ function RegisterAccount() {
                       placeholder="e.g. Ghanaian"
                       value={"Ghanaian"}
                       name="nationality"
-                      onChange={handleInputChange}
+
                       // disabled
                     />
                   </div>
@@ -222,7 +209,6 @@ function RegisterAccount() {
                       type="text"
                       placeholder="GA-512-9090"
                       name="address"
-                      onChange={handleInputChange}
                       required
                     />
                   </div>
@@ -234,7 +220,6 @@ function RegisterAccount() {
                       type="text"
                       placeholder="e.g. Deacon"
                       name="position"
-                      onChange={handleInputChange}
                       required
                     />
                   </div>
@@ -249,7 +234,6 @@ function RegisterAccount() {
                       type="password"
                       placeholder="e.g. church1234"
                       name="password"
-                      onChange={handleInputChange}
                       required
                     />
                   </div>
@@ -261,7 +245,6 @@ function RegisterAccount() {
                       type="password"
                       placeholder="e.g. church1234"
                       name="password_confirm"
-                      onChange={handleInputChange}
                       required
                     />
                   </div>
@@ -270,7 +253,7 @@ function RegisterAccount() {
                 {/* submit */}
                 <button
                   type="submit"
-                  onClick={validForm ? createMember : null}
+                  onClick={createMember}
                   className={`${loading ? "btn-outlined" : "btn-primary"} 
                     w-1/2 float-right mt-4`}
                 >

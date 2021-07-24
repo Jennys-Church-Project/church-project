@@ -1,54 +1,26 @@
 import { useRouter } from "next/router";
 import AdminLayout from "../../../components/admin.layout";
-import UserCard from "../../../components/user.card";
+import Spinner from "../../../components/spinner";
 import DashboardHeaderCardItem from "../../../components/dashboard.header.card";
 import { kAppName } from "../../../utils/constants";
 import { RiAccountPinCircleLine } from "react-icons/ri";
 import { BsFillPersonFill } from "react-icons/bs";
 import { HiUserGroup } from "react-icons/hi";
 import { MdSupervisorAccount } from "react-icons/md";
-import { useState } from "react";
-import Image from "next/image";
+import { useEffect, useState } from "react";
 
 // firebase
 import firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/firestore";
-import { GiPerspectiveDiceOne } from "react-icons/gi";
-
-export const headerCards = [
-  {
-    title: "Users onsite",
-    subtitle: "456",
-    Icon: RiAccountPinCircleLine,
-    color: "white",
-    background: "black",
-  },
-  {
-    title: "Pastors",
-    subtitle: "26",
-    Icon: BsFillPersonFill,
-    color: "white",
-    background: "indigo-400",
-  },
-  {
-    title: "Members",
-    subtitle: "123",
-    Icon: MdSupervisorAccount,
-    color: "white",
-    background: "green-400",
-  },
-  {
-    title: "Other staff",
-    subtitle: "98",
-    Icon: HiUserGroup,
-    color: "white",
-    background: "red-400",
-  },
-];
+import AdminUserCard from "../../../components/admin.user.card";
 
 export async function getStaticProps(context) {
-  const { docs } = await firebase.firestore().collection("members").get();
+  const { docs } = await firebase
+    .firestore()
+    .collection("members")
+    .orderBy("created_at", "desc")
+    .get();
   let members = [];
   if (docs) {
     docs
@@ -71,7 +43,45 @@ function AdminHome({ members, pastors, other_staff }) {
   // router
   const router = useRouter();
 
-  const [activeHeader, setActiveHeader] = useState(headerCards[0]);
+  const [headerCards, setHeaderCards] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [activeHeader, setActiveHeader] = useState(null);
+
+  useEffect(() => {
+    const headerCards = [
+      {
+        title: "All Users",
+        subtitle: `${members.length + pastors.length + other_staff.length}`,
+        Icon: RiAccountPinCircleLine,
+        color: "white",
+        background: "black",
+      },
+      {
+        title: "Pastors",
+        subtitle: `${pastors.length}`,
+        Icon: BsFillPersonFill,
+        color: "white",
+        background: "indigo-400",
+      },
+      {
+        title: "Members",
+        subtitle: `${members.length}`,
+        Icon: MdSupervisorAccount,
+        color: "white",
+        background: "green-400",
+      },
+      {
+        title: "Other staff",
+        subtitle: `${other_staff.length}`,
+        Icon: HiUserGroup,
+        color: "white",
+        background: "red-400",
+      },
+    ];
+    setHeaderCards(headerCards);
+    setActiveHeader(headerCards[0]);
+    setLoading(false);
+  }, [members, pastors, other_staff]);
 
   return (
     <AdminLayout>
@@ -113,43 +123,28 @@ function AdminHome({ members, pastors, other_staff }) {
         </div>
 
         {/* content */}
-        <div className="flex flex-col space-y-2">
-          {/* title */}
-          <h6 className="text-sm text-gray-400">{activeHeader.title}</h6>
-          {/* users */}
-          <div className="grid grid-cols-5">
-            {members.map((person) => (
-              <div
-                key={person.id}
-                onClick={() => alert(person.id)}
-                className="w-full overflow-hidden bg-white h-32 rounded-xl flex flex-col"
-              >
-                <div className="flex space-x-2">
-                  {/* avatar */}
-                  <div className="w-16 h-16 bg-gray-100 rounded-br-lg overflow-hidden">
-                    {person.avatar && (
-                      <Image
-                        src={person.avatar}
-                        width={64}
-                        height={64}
-                        objectFit="cover"
-                      />
-                    )}
-                  </div>
-                  {/* full name */}
-                  <div className="flex flex-col pt-2 flex-1">
-                    <h6 className="text-sm">
-                      {person.first_name} {person.last_name}
-                    </h6>
-                    <p className="text-xs text-gray-600 font-serif">
-                      {person.email}
-                    </p>
-                  </div>
-                </div>
+        {loading ? (
+          <>
+            <Spinner isAbsolute />
+          </>
+        ) : (
+          <>
+            <div className="flex flex-col space-y-2">
+              {/* title */}
+              <h6 className="text-lg text-gray-600">{activeHeader.title}</h6>
+              {/* users */}
+              <div className="grid grid-cols-4 gap-x-4 gap-y-8">
+                {members.map((person) => (
+                  <AdminUserCard
+                    person={person}
+                    key={person.id}
+                    onClick={() => alert(person.id)}
+                  />
+                ))}
               </div>
-            ))}
-          </div>
-        </div>
+            </div>
+          </>
+        )}
       </div>
     </AdminLayout>
   );

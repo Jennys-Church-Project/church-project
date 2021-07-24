@@ -36,32 +36,27 @@ export default async function registerMember(req, res) {
 
     // token
     const token = await user.getIdToken();
-    console.log(`user -> ${user}`);
 
     // save members doc
-    await firebase
-      .firestore()
-      .collection("members")
-      .doc(user.uid)
-      .set(
-        {
-          first_name,
-          last_name,
-          middle_name,
-          email,
-          id: user.uid,
-          token,
-          avatar,
-          dob,
-          address,
-          position,
-          contact,
-          hometown,
-          nationality,
-          created_at: firebase.firestore.Timestamp.fromDate(new Date()),
-        },
-        { merge: true }
-      );
+    await firebase.firestore().collection("members").doc(user.uid).set(
+      {
+        first_name,
+        last_name,
+        middle_name,
+        email,
+        id: user.uid,
+        token,
+        avatar,
+        dob,
+        address,
+        position,
+        contact,
+        hometown,
+        nationality,
+        created_at: new Date().getTime(),
+      },
+      { merge: true }
+    );
 
     return res.status(200).json({ data: req.body });
   } catch (error) {

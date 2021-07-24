@@ -32,7 +32,7 @@ function DashboardHeaderCardItem({
       <div
         className={`${
           active ? `bg-${color}` : `bg-${background}`
-        } absolute top-8 -right-16 rounded-full w-56 h-56`}
+        } absolute top-1/3 -right-1/3 rounded-full w-56 h-56`}
       />
       <FaLongArrowAltRight
         className={`${

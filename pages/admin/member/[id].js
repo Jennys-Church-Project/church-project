@@ -1,4 +1,5 @@
 import AdminLayout from "../../../components/admin.layout";
+import Spinner from "../../../components/spinner";
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import { RiImageAddFill } from "react-icons/ri";
@@ -7,6 +8,7 @@ import { RiImageAddFill } from "react-icons/ri";
 import firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/firestore";
+import "firebase/storage";
 
 export async function getStaticPaths() {
   // get all services
@@ -54,6 +56,7 @@ function UserDetails({ person }) {
   const [hasPickedImage, setHasPickedImage] = useState(false);
   const [loading, setLoading] = useState(false);
   const [uploading, setUploading] = useState(false);
+  const [avatarFile, setAvatarFile] = useState(null);
 
   // get user instance
   useEffect(async () => {
@@ -73,12 +76,55 @@ function UserDetails({ person }) {
   // update user
   const updateUser = async (ev) => {
     ev.preventDefault();
+    setLoading(true);
 
-    console.log(ev.target);
+    // save user details
+    await firebase
+      .firestore()
+      .doc(`members/${user.id}`)
+      .set(
+        {
+          ...editableUser,
+          updated_at: new Date().getTime(),
+        },
+        { merge: true }
+      );
+
+    setLoading(false);
   };
 
   // pick image from device
-  const pickImage = async (ev) => {};
+  const pickImage = async () => {
+    document.getElementById("profile_avatar").click();
+  };
+
+  // handle file changes
+  const onFilePickerChanged = (ev) => {
+    let file = ev.target.files[0];
+    if (file.type.startsWith("image/")) {
+      console.log(ev);
+      setHasPickedImage(true);
+      setAvatarFile(file);
+    } else {
+      confirm("invalid file type selected. Try again");
+    }
+  };
+
+  // upload file to storage bucket
+  const uploadImage = async () => {
+    if (hasPickedImage) {
+      setUploading(true);
+      let bucketRef = firebase.storage().ref().child(`user/${user.id}`);
+      bucketRef.put(avatarFile).then(async (snapshot) => {
+        let downloadUrl = await snapshot.ref.getDownloadURL();
+        console.log(downloadUrl);
+        setUploading(false);
+        setEditableUser({ ...editableUser, avatar: downloadUrl });
+        setAvatarFile(null);
+        setHasPickedImage(false);
+      });
+    }
+  };
 
   return (
     <AdminLayout>
@@ -86,27 +132,53 @@ function UserDetails({ person }) {
         {/* top -> user profile picture */}
         <div className="flex flex-row space-x-4 relative items-center">
           {/* avatar section */}
-          <div className="bg-gray-300 rounded-full w-24 h-24 relative">
-            <div
-              className="absolute w-8 h-8 flex items-center justify-center cursor-pointer bg-gray-300 border-4 border-white z-10 rounded-full overflow-hidden top-0 right-0"
-              onClick={pickImage}
-            >
-              <RiImageAddFill />
-            </div>
-            {hasPickedImage && <></>}
-            {user.avatar && (
-              <div className="overflow-hidden rounded-full h-full w-full border-4 border-white">
-                <Image
-                  src={user.avatar}
-                  objectFit="cover"
-                  width={96}
-                  height={96}
+          <div className="flex flex-col space-y-1 items-center">
+            <div className="bg-gray-300 rounded-full w-24 h-24 relative">
+              <div
+                className="absolute w-8 h-8 flex items-center justify-center cursor-pointer bg-gray-300 border-4 border-white z-10 rounded-full overflow-hidden top-0 right-0"
+                onClick={pickImage}
+              >
+                <RiImageAddFill />
+                <input
+                  type="file"
+                  id="profile_avatar"
+                  onChange={onFilePickerChanged}
+                  hidden
                 />
               </div>
+              {uploading && (
+                <div className="absolute h-full w-full bg-black bg-opacity-30 rounded-full overflow-hidden flex items-center justify-center">
+                  <Spinner size={8} />
+                </div>
+              )}
+              {!hasPickedImage && editableUser.avatar && (
+                <div className="overflow-hidden rounded-full h-full w-full border-4 border-white">
+                  <Image
+                    src={editableUser.avatar}
+                    objectFit="cover"
+                    width={96}
+                    height={96}
+                  />
+                </div>
+              )}
+            </div>
+
+            {/* upload button */}
+            {hasPickedImage && (
+              <>
+                <button
+                  type="button"
+                  hidden={avatarFile === null}
+                  className={`${uploading ? "btn-outlined" : "btn-primary"}`}
+                  onClick={uploadImage}
+                >
+                  <h6 className="">{uploading ? "Uploading..." : "Upload"}</h6>
+                </button>
+              </>
             )}
           </div>
 
-          {/* username section */}
+          {/* user details section */}
           <div className="flex-1 flex flex-col justify-center items-start">
             {/* full name */}
             <h4>
@@ -309,18 +381,31 @@ function UserDetails({ person }) {
             </div>
 
             {/* submit */}
-            <button
-              type="submit"
-              disabled={user === editableUser}
-              className={`${
-                loading ? "btn-outlined" : "btn-primary"
-              }  float-right mt-4`}
-            >
-              <h6 className="">
-                {loading ? "Please wait..." : "Save & continue"}
-              </h6>
-            </button>
+            {loading ? (
+              <>
+                <Spinner />
+              </>
+            ) : (
+              <>
+                <button
+                  type="submit"
+                  disabled={user === editableUser}
+                  className={`${
+                    loading ? "btn-outlined" : "btn-primary"
+                  }  float-right mt-4`}
+                >
+                  <h6 className="">
+                    {loading ? "Please wait..." : "Save & continue"}
+                  </h6>
+                </button>
+              </>
+            )}
           </form>
+        </div>
+
+        {/* financial info */}
+        <div className="flex-1 flex flex-col space-y-4">
+          <h2 className="text-2xl">Financial Status</h2>
         </div>
       </div>
     </AdminLayout>

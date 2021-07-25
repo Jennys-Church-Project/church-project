@@ -26,7 +26,7 @@ const clientCredentials = {
   measurementId: "G-XZ0M0SJ668",
 };
 
-export default function init() {
+export default async function init() {
   if (!firebase.apps.length) {
     firebase.initializeApp(clientCredentials);
 
@@ -42,14 +42,14 @@ export default function init() {
     console.log("firebase was successfully initialized");
 
     // prepopulate database
-    const speakersCol = firebase.firestore().collection("speakers");
-    const servicesCol = firebase.firestore().collection("services");
-    const faqsCol = firebase.firestore().collection("faqs");
+    // const speakersCol = firebase.firestore().collection("speakers");
+    // const servicesCol = firebase.firestore().collection("services");
+    // const faqsCol = firebase.firestore().collection("faqs");
 
     // prepoluate with all speakers
-    speakers.forEach(async (item) => {
-      await speakersCol.doc(item.id).set(item, { merge: true });
-    });
+    // speakers.forEach(async (item) => {
+    //   await speakersCol.doc(item.id).set(item, { merge: true });
+    // });
 
     // prepoluate with all services
     // services.forEach(async (item) => {
@@ -62,23 +62,3 @@ export default function init() {
     // });
   }
 }
-
-// prepopulate database
-// const speakersCol = firebase.firestore().collection("speakers");
-// const servicesCol = firebase.firestore().collection("services");
-// const faqsCol = firebase.firestore().collection("faqs");
-
-// // prepoluate with all speakers
-// speakers.forEach(async (item) => {
-//   await speakersCol.doc(item.id).set(item, { merge: true });
-// });
-
-// // prepoluate with all services
-// services.forEach(async (item) => {
-//   await servicesCol.doc(item.id).set(item, { merge: true });
-// });
-
-// // prepopulate with all faqs
-// faqs.forEach(async (item) => {
-//   await faqsCol.doc(item.id).set(item, { merge: true });
-// });

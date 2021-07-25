@@ -71,9 +71,6 @@ function ServiceItemDetails({ isAdmin, service, speakers }) {
   // router
   const router = useRouter();
 
-  // get id
-  const { id } = router.query;
-
   // loading
   const [joining, setJoining] = useState(false);
 
@@ -89,30 +86,14 @@ function ServiceItemDetails({ isAdmin, service, speakers }) {
   const joinService = async () => {
     if (service.isOngoing) {
       router.push(`/dashboard/service/${service.id}/livestream`);
-    } else {
-      // todo -> join service
-      setJoining(true);
-      let currentUser = firebase.auth().currentUser;
-      if (currentUser) {
-        service.attendants.push(currentUser.uid);
-        await firebase
-          .firestore()
-          .doc(`services/${service.id}`)
-          .set(service, { merge: true });
-      }
-
-      setTimeout(
-        () => {
-          setHasJoinService(!hasJoinedService);
-          setJoining(false);
-        },
-        hasJoinedService ? 1200 : 350
-      );
     }
   };
 
   useEffect(() => {
+    let now = new Date().getTime();
     if (service) service.isOngoing = true;
+    //! TODO -> apply ongoing state
+    // service.isOngoing = now > service.start_time && now <= service.end_time;
     if (speakers) setActiveSpeaker(speakers[0]);
   }, [speakers]);
 
@@ -123,19 +104,22 @@ function ServiceItemDetails({ isAdmin, service, speakers }) {
       ) : (
         <div className="w-full max-w-7xl grid grid-cols-2 xl:grid-cols-3 gap-x-8 h-full">
           {/* speakers */}
-          <div className="flex flex-col items-center card pb-4">
+          <div className="flex flex-col h-full items-center card pb-4">
             {/* banner & active speaker */}
-            <div className="flex flex-col h-1/3 w-full bg-primary rounded-tr-2xl rounded-tl-2xl relative">
+            <div className="flex flex-col h-56 w-full relative">
               {/* banner */}
-              <Image
-                src={service?.banner}
-                layout="fill"
-                className="object-cover rounded-tr-2xl rounded-tl-2xl"
-              />
+              <div className="overflow-hidden bg-primary rounded-tr-2xl rounded-tl-2xl h-full w-full">
+                <Image
+                  src={service?.banner}
+                  height={500}
+                  width={800}
+                  objectFit="cover"
+                />
+              </div>
 
               {/* active speaker */}
               {activeSpeaker && activeSpeaker.avatar && (
-                <div className="rounded-full h-32 w-32 bg-gray-100 border-8 border-white absolute top-3/4 inset-x-0 mx-auto ">
+                <div className="z-10 rounded-full h-32 w-32 bg-gray-100 border-8 border-white absolute top-3/4 inset-x-0 mx-auto ">
                   <Image
                     src={activeSpeaker.avatar}
                     width={128}
@@ -181,6 +165,7 @@ function ServiceItemDetails({ isAdmin, service, speakers }) {
                   {/* join service */}
                   <button
                     onClick={joinService}
+                    disabled={!service.isOngoing}
                     className={`${
                       hasJoinedService ? "btn-primary" : "btn-outlined"
                     }

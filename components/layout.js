@@ -13,7 +13,11 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { kAppName, kUserId, kUserToken, kUserType } from "../utils/constants";
 import { BiSearchAlt, BiBell } from "react-icons/bi";
-import { RiDashboardLine } from "react-icons/ri";
+import { RiAccountPinCircleLine, RiHome5Line } from "react-icons/ri";
+import { GiLifeSupport } from "react-icons/gi";
+import { FaMoneyCheck } from "react-icons/fa";
+import { FiHelpCircle } from "react-icons/fi";
+import { BsPeople } from "react-icons/bs";
 import DropDown from "./dropdown";
 
 // firebase
@@ -22,59 +26,47 @@ import "firebase/auth";
 import "firebase/firestore";
 
 // dashboard content
-export const dashboardTabs = (isAdmin) =>
-  isAdmin
-    ? [
-        {
-          name: "Service",
-          url: "/dashboard/service",
-        },
-        {
-          name: "Youth Meetings",
-          url: "/dashboard/youth-meetings",
-        },
-        {
-          name: "Leaders Meetings",
-          url: "/dashboard/leaders-meetings",
-        },
-      ]
-    : [
-        {
-          name: "Service",
-          url: "/dashboard/service",
-        },
-        {
-          name: "Youth Meetings",
-          url: "/dashboard/youth-meetings",
-        },
-        {
-          name: "Leaders Meetings",
-          url: "/dashboard/leaders-meetings",
-        },
-        {
-          name: "Counselling",
-          url: "/dashboard/counselling",
-        },
-        {
-          name: "Financial Status",
-          url: "/dashboard/welfare",
-        },
-        {
-          name: "Account Settings",
-          url: "/dashboard/account",
-        },
-        {
-          name: "Support",
-          url: "/dashboard/support",
-        },
-      ];
+export const dashboardTabs = [
+  {
+    name: "Service",
+    url: "/dashboard/service",
+    Icon: RiHome5Line,
+  },
+  {
+    name: "Youth Meetings",
+    url: "/dashboard/youth-meetings",
+    Icon: BsPeople,
+  },
+  {
+    name: "Leaders Meetings",
+    url: "/dashboard/leaders-meetings",
+    Icon: BsPeople,
+  },
+  {
+    name: "Counselling",
+    url: "/dashboard/counselling",
+    Icon: GiLifeSupport,
+  },
+  {
+    name: "Financial Status",
+    url: "/dashboard/welfare",
+    Icon: FaMoneyCheck,
+  },
+  {
+    name: "Account Settings",
+    url: "/dashboard/account",
+    Icon: RiAccountPinCircleLine,
+  },
+  {
+    name: "Support",
+    url: "/dashboard/support",
+    Icon: FiHelpCircle,
+  },
+];
 
 function Layout({ children }) {
   // router
   const router = useRouter();
-
-  // tabs
-  const [tabs, setTabs] = useState([]);
 
   // current user
   const [currentUser, setCurrentUser] = useState(null);
@@ -95,7 +87,7 @@ function Layout({ children }) {
         const res = await fetch("/api/member", {
           body: JSON.stringify({
             uid: localStorage.getItem(kUserId),
-            isMember: localStorage.getItem(kUserType) === "member",
+            isMember: true,
           }),
           headers: {
             "Content-Type": "application/json",
@@ -106,10 +98,8 @@ function Layout({ children }) {
           const member = await res.json();
           setCurrentUser(member);
           localStorage.setItem(kUserType, "member");
-          setTabs(dashboardTabs(false));
         } else {
           console.log("no user account found");
-          setTabs(dashboardTabs(true));
         }
       } else {
         console.log("user signed out");
@@ -121,7 +111,7 @@ function Layout({ children }) {
   return (
     <div className="min-h-screen w-screen overflow-hidden">
       <Head>
-        <title>Dashboard</title>
+        <title>Membership Account</title>
       </Head>
       <div className="justify-center bg-gray-100 items-center min-h-screen">
         {/* sidebar */}
@@ -233,13 +223,13 @@ function Layout({ children }) {
                 </>
               ) : (
                 <DropDown>
-                  <div className="avatar"></div>{" "}
+                  <div className="avatar"></div>
                 </DropDown>
               )}
             </div>
           </div>
           {/* body */}
-          <div className="max-w-6xl 2xl:max-w-7xl mx-auto pt-24 flex-1 w-full overflow-auto h-full relative px-4 py-6">
+          <div className="overflow-x-hidden px-8 xl:px-0 xl:max-w-6xl mx-auto mt-24 flex-1 w-full overflow-auto h-full relative py-6">
             {children}
           </div>
         </div>

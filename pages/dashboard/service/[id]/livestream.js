@@ -5,6 +5,7 @@ import firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/firestore";
 import { useState } from "react";
+import Spinner from "../../../../components/spinner";
 
 // get paths
 export async function getStaticPaths() {
@@ -62,10 +63,21 @@ export async function getStaticProps({ params }) {
 
 function Livestream({ service, userId }) {
   const [hasJoined, setHasJoined] = useState(false);
+  const [downloading, setDownloading] = useState(false);
 
   // download streamed video
   const downloadVideo = async () => {
     // TODO -> DOWNLOAD VIDEO
+    if (
+      confirm(
+        "Do you wish to start downloading this sermon? (NB: Data charges apply)"
+      )
+    ) {
+      setDownloading(true);
+      setTimeout(() => {
+        setDownloading(false);
+      }, 3500);
+    }
   };
 
   // join livestream
@@ -94,13 +106,19 @@ function Livestream({ service, userId }) {
 
           {/* button */}
           <div className="flex flex-row items-center space-x-4 w-1/2 justify-end">
-            <button
-              type="button"
-              onClick={downloadVideo}
-              className={`btn-primary w-1/3`}
-            >
-              <h6 className="">Download sermon</h6>
-            </button>
+            {downloading ? (
+              <div className="w-12">
+                <Spinner size={8} />
+              </div>
+            ) : (
+              <button
+                type="button"
+                onClick={downloadVideo}
+                className={`btn-primary w-1/3`}
+              >
+                <h6 className="">Download sermon</h6>
+              </button>
+            )}
 
             <button
               type="button"
@@ -111,11 +129,13 @@ function Livestream({ service, userId }) {
             </button>
           </div>
         </div>
-        <div className="flex-1 mt-8">
+
+        {/* stream */}
+        <div className="flex-1 mt-8 h-3/4 w-full">
           <iframe
             src={service.stream_url}
             width="100%"
-            height="100%"
+            height={720}
             frameborder="0"
             scrolling="no"
             allow="autoplay"

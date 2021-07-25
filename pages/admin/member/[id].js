@@ -182,12 +182,12 @@ function UserDetails({ person }) {
           <div className="flex-1 flex flex-col justify-center items-start">
             {/* full name */}
             <h4>
-              {user.first_name} {user.last_name}
+              {user.first_name} {user.middle_name} {user.last_name}
             </h4>
 
             {/* info */}
             <p className="text-sm text-gray-400 font-serif">
-              Manage user&apos;s personal information, password and more
+              Manage user&apos;s personal information and more
             </p>
           </div>
         </div>
@@ -254,7 +254,7 @@ function UserDetails({ person }) {
             {/* email & contact section */}
             <div className="form-row">
               {/* email address */}
-              <div className="form-control form-row-2">
+              <div className="form-control">
                 <label htmlFor="email">Email Address</label>
                 <input
                   type="email"
@@ -282,10 +282,7 @@ function UserDetails({ person }) {
                   }
                 />
               </div>
-            </div>
 
-            {/* nationality & dob section */}
-            <div className="form-row">
               {/* home town */}
               <div className="form-control">
                 <label htmlFor="hometown">Hometown</label>
@@ -302,7 +299,10 @@ function UserDetails({ person }) {
                   }
                 />
               </div>
+            </div>
 
+            {/* nationality & dob section */}
+            <div className="form-row">
               {/* dob */}
               <div className="form-control">
                 <label htmlFor="dob">Date of Birth</label>
@@ -327,7 +327,6 @@ function UserDetails({ person }) {
                 <input
                   type="text"
                   placeholder="e.g. Ghanaian"
-                  value={"Ghanaian"}
                   name="nationality"
                   disabled={true}
                   value={editableUser.nationality}
@@ -340,9 +339,7 @@ function UserDetails({ person }) {
                   className=""
                 />
               </div>
-            </div>
 
-            <div className="form-row">
               {/* physical address */}
               <div className="form-control">
                 <label htmlFor="address">Ghana Post Address</label>
@@ -360,9 +357,11 @@ function UserDetails({ person }) {
                   required
                 />
               </div>
+            </div>
 
+            <div className="form-row">
               {/* physical address */}
-              <div className="form-control form-row-2">
+              <div className="form-control">
                 <label htmlFor="position">Position</label>
                 <input
                   type="text"

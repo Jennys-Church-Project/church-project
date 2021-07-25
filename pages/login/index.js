@@ -19,7 +19,7 @@ import { MdSupervisorAccount } from "react-icons/md";
 // firebase
 import firebase from "firebase/app";
 import "firebase/auth";
-import { kUserType } from "../../utils/constants";
+import { kUser, kUserType } from "../../utils/constants";
 
 export const accountTypes = [
   {
@@ -51,6 +51,10 @@ function LoginPage() {
     const email = e.target.email.value;
     const password = e.target.password.value;
 
+    // save user type
+    localStorage.setItem(kUserType, userType);
+    console.log(localStorage.getItem(kUserType));
+
     try {
       const { user } = await firebase
         .auth()
@@ -68,6 +72,7 @@ function LoginPage() {
       } else {
         // reset all fields
         e.target.reset();
+        router.push(userType === "administrator" ? "/admin" : "/dashboard");
       }
     } catch (error) {
       setLoading(false);
@@ -83,7 +88,7 @@ function LoginPage() {
       if (user) {
         console.log(user);
         localStorage.setItem(kUserType, userType);
-        router.push(userType === "member" ? "/dashboard" : "/admin");
+        console.log(localStorage.getItem(kUserType));
       }
     });
     return null;

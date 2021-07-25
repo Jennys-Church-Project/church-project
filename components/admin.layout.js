@@ -9,7 +9,7 @@
 import Head from "next/head";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { kAppName, kUserId, kUserToken } from "../utils/constants";
 import { BiSearchAlt, BiBell, BiChurch } from "react-icons/bi";
 import { BsPeople } from "react-icons/bs";

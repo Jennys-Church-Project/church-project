@@ -1,10 +1,14 @@
 import AdminLayout from "../../../components/admin.layout";
+import Spinner from "../../../components/spinner";
 import { useEffect, useState } from "react";
+import Image from "next/image";
+import { RiImageAddFill } from "react-icons/ri";
 
 // firebase
 import firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/firestore";
+import "firebase/storage";
 
 export async function getStaticPaths() {
   // get all services
@@ -178,7 +182,9 @@ function AdminDetails({ person }) {
           <div className="flex-1 flex flex-col justify-center items-start">
             {/* full name */}
             <h4>
-              {user.first_name} {user.last_name}
+              {user.first_name && user.last_name
+                ? `${user.first_name} ${user.last_name}`
+                : user.name}
             </h4>
 
             {/* info */}
@@ -250,14 +256,20 @@ function AdminDetails({ person }) {
             {/* email & contact section */}
             <div className="form-row">
               {/* email address */}
-              <div className="form-control form-row-2">
+              <div className="form-control">
                 <label htmlFor="email">Email Address</label>
                 <input
                   type="email"
                   placeholder="e.g. john.doe@mail.com"
                   name="email"
-                  value={user.email}
-                  disabled={true}
+                  value={editableUser.email}
+                  onChange={(e) =>
+                    setEditableUser({
+                      ...editableUser,
+                      email: e.target.value,
+                    })
+                  }
+                  disabled={false}
                   required
                 />
               </div>
@@ -278,33 +290,13 @@ function AdminDetails({ person }) {
                   }
                 />
               </div>
-            </div>
-
-            {/* nationality & dob section */}
-            <div className="form-row">
-              {/* home town */}
-              <div className="form-control">
-                <label htmlFor="hometown">Hometown</label>
-                <input
-                  type="text"
-                  placeholder="e.g. Accra Central"
-                  name="hometown"
-                  value={editableUser.hometown}
-                  onChange={(e) =>
-                    setEditableUser({
-                      ...editableUser,
-                      hometown: e.target.value,
-                    })
-                  }
-                />
-              </div>
 
               {/* dob */}
               <div className="form-control">
                 <label htmlFor="dob">Date of Birth</label>
                 <input
                   type="text"
-                  placeholder="e.g. 23/08/1993"
+                  placeholder="e.g. 23/08/1995"
                   name="dob"
                   value={editableUser.dob}
                   onChange={(e) =>
@@ -316,14 +308,16 @@ function AdminDetails({ person }) {
                   required
                 />
               </div>
+            </div>
 
+            {/* nationality & dob section */}
+            <div className="form-row">
               {/* nationality */}
               <div className="form-control">
                 <label htmlFor="nationality">Nationality</label>
                 <input
                   type="text"
                   placeholder="e.g. Ghanaian"
-                  value={"Ghanaian"}
                   name="nationality"
                   disabled={true}
                   value={editableUser.nationality}
@@ -336,9 +330,7 @@ function AdminDetails({ person }) {
                   className=""
                 />
               </div>
-            </div>
 
-            <div className="form-row">
               {/* physical address */}
               <div className="form-control">
                 <label htmlFor="address">Ghana Post Address</label>
@@ -356,15 +348,17 @@ function AdminDetails({ person }) {
                   required
                 />
               </div>
+            </div>
 
+            <div className="form-row">
               {/* physical address */}
-              <div className="form-control form-row-2">
+              <div className="form-control">
                 <label htmlFor="position">Position</label>
                 <input
                   type="text"
-                  placeholder="e.g. Deacon"
+                  placeholder="e.g. Pastor"
                   name="position"
-                  value={editableUser.position}
+                  value={"Pastor"}
                   onChange={(e) =>
                     setEditableUser({
                       ...editableUser,

@@ -139,7 +139,7 @@ function Layout({ children }) {
                   key={option.url}
                   onClick={() => router.push(option.url)}
                   className={`${
-                    active && "bg-gray-100 rounded-md"
+                    active && "bg-gray-200 rounded-md"
                   } flex flex-row space-x-2 cursor-pointer px-4 py-3 items-center`}
                 >
                   <option.Icon

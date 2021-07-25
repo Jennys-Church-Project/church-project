@@ -165,7 +165,7 @@ function ServiceItemDetails({ isAdmin, service, speakers }) {
                   {/* join service */}
                   <button
                     onClick={joinService}
-                    disabled={!service.isOngoing}
+                    disabled={!service.isOngoing || service.stream_url === null}
                     className={`${
                       hasJoinedService ? "btn-primary" : "btn-outlined"
                     }

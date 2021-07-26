@@ -14,7 +14,7 @@ function Hero() {
   var timestamp = new Date();
 
   return (
-    <section className="w-screen flex flex-col items-center max-w-3xl py-16 mx-auto mt-8 md:max-w-2xl">
+    <section className="w-screen overflow-x-hidden flex flex-col items-center max-w-3xl py-16 mx-auto mt-8 md:max-w-2xl">
       {/* top */}
       <div className="flex justify-between items-center w-full px-8 max-w-xl mx-auto">
         <h6 className="font-serif uppercase text-sm">Accra, GH</h6>
@@ -26,9 +26,7 @@ function Hero() {
 
       {/* middle */}
       <div className="flex flex-col items-center text-center pt-7 px-8 space-y-6 lg:space-y-8">
-        <h1 className="text-5xl lg:text-8xl font-bold uppercase">
-          King of Glory 2021
-        </h1>
+        <h1 className="text-5xl lg:text-8xl font-bold uppercase">{kAppName}</h1>
         <p className="font-serif w-full md:w-2/3">
           You cannot touch on the greatness of God without His Glory
           manifesting. This is your time

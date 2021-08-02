@@ -176,7 +176,7 @@ function AdminLayout({ children }) {
             </div>
           </div>
           {/* body */}
-          <div className="overflow-x-hidden px-8 xl:px-0 xl:max-w-6xl mx-auto mt-24 flex-1 w-full overflow-auto h-full relative py-6">
+          <div className="bg-gray-100 overflow-x-hidden px-8 xl:px-0 xl:max-w-6xl mx-auto mt-24 flex-1 w-full overflow-auto h-full relative py-6">
             {children}
           </div>
         </div>

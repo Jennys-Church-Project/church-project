@@ -13,14 +13,13 @@
 import Link from "next/link";
 import Image from "next/image";
 import { BsArrowRight } from "react-icons/bs";
+import { format, formatDistance, formatRelative, subDays } from "date-fns";
 
 function ServiceCard({ service }) {
   // modify timestamp
-  service.dateNum = service.date.substring(
-    service.date.indexOf(" "),
-    service.date.indexOf(",")
-  );
-  service.dateMonth = service.date.substr(0, 3);
+  service.dateNum = format(new Date(service.date), "dd");
+  service.dateMonth = format(new Date(service.date), "MMM");
+  service.duration = format(new Date(service.date), "hh:mm a");
 
   return (
     <Link key={service} href={`/dashboard/service/${service.id}`}>

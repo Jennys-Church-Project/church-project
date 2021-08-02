@@ -6,6 +6,13 @@
  * Last Modified: Thursday, June 24th 2021 6:13:21 am                          *
  */
 
+// database references
+export const kServicesRef = "services";
+export const kFaqsRef = "faqs";
+export const kMembersRef = "members";
+export const kSpeakersRef = "speakers";
+export const kFinancesRef = "finances";
+
 // local storage
 export const kUserId = "user.id";
 export const kUserType = "user.type";

@@ -72,7 +72,7 @@ function LoginPage() {
       } else {
         // reset all fields
         e.target.reset();
-        router.push(userType === "administrator" ? "/admin" : "/dashboard");
+        router.push(user.email.startsWith("admin") ? "/admin" : "/dashboard");
       }
     } catch (error) {
       setLoading(false);

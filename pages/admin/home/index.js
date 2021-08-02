@@ -111,10 +111,10 @@ function AdminHome({ members, pastors, other_staff }) {
 
           {/* right */}
           <button
-            className="btn-primary"
+            className="btn-outlined"
             onClick={() => router.push("/register")}
           >
-            <h6>Add a new member</h6>
+            <h6>Add new</h6>
           </button>
         </div>
 

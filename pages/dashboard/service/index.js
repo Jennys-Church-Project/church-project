@@ -6,22 +6,16 @@
  * Last Modified: Thu Jul 08 2021                                              *
  */
 
-import Link from "next/link";
-import Image from "next/image";
-import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
-import { BsArrowRight } from "react-icons/bs";
 import Layout from "../../../components/layout";
-import Spinner from "../../../components/spinner";
 import Lottie from "lottie-react";
 import animationData from "../../../public/empty_status.json";
+import { kAppName, kServicesRef, kSpeakersRef } from "../../../utils/constants";
+import ServiceCard from "../../../components/service.card";
 
 // firebase
 import firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/firestore";
-import { kAppName } from "../../../utils/constants";
-import ServiceCard from "../../../components/service.card";
 
 // get services
 export async function getStaticProps(context) {
@@ -30,12 +24,15 @@ export async function getStaticProps(context) {
   let db = firebase.firestore();
 
   // get speakers
-  let { docs } = await db.collection("speakers").get();
+  let { docs } = await db.collection(kSpeakersRef).get();
 
   if (docs) churchSpeakers = docs.map((item) => item.data());
 
   // get services
-  const snapshot = await db.collection("services").get();
+  const snapshot = await db
+    .collection(kServicesRef)
+    .orderBy("date", "asc")
+    .get();
   if (snapshot.docs) {
     let data = snapshot.docs.map((item) => item.data());
 

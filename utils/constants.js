@@ -12,6 +12,7 @@ export const kFaqsRef = "faqs";
 export const kMembersRef = "members";
 export const kSpeakersRef = "speakers";
 export const kFinancesRef = "finances";
+export const kMeetingsRef = "meetings";
 
 // local storage
 export const kUserId = "user.id";

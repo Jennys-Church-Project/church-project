@@ -1,7 +1,7 @@
 import AdminLayout from "../../../components/admin.layout";
 import Lottie from "lottie-react";
 import animationData from "../../../public/empty_status.json";
-import { kAppName } from "../../../utils/constants";
+import { kAppName, kMeetingsRef } from "../../../utils/constants";
 import ServiceCard from "../../../components/service.card";
 import { useRouter } from "next/router";
 
@@ -10,7 +10,31 @@ import firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/firestore";
 
-function Meetings() {
+// get all meetings
+export async function getStaticProps(context) {
+  let db = firebase.firestore();
+  let meetings = [];
+
+  const snapshot = await db
+    .collection(kMeetingsRef)
+    .orderBy("date", "asc")
+    .get();
+
+  if (snapshot.docs) {
+    meetings = snapshot.docs.map((item) => item.data());
+  }
+
+  return {
+    props: {
+      meetings,
+    },
+  };
+}
+
+function Meetings({ meetings }) {
+  // empty ui
+  const showEmptyUI = !meetings || meetings.length === 0;
+
   // router
   const router = useRouter();
 
@@ -36,6 +60,29 @@ function Meetings() {
             <h6>Add new</h6>
           </button>
         </div>
+
+        {showEmptyUI ? (
+          <>
+            <div className="flex flex-col items-center justify-center text-center h-full">
+              {/* animation */}
+              <Lottie animationData={animationData} />
+              <h1 className="text-lg">No meetings available yet</h1>
+              <p className="text-black text-opacity-60 text-sm font-serif">
+                Meetings will appear here
+              </p>
+            </div>
+          </>
+        ) : (
+          <>
+            <div className="grid grid-cols-2 2xl:grid-cols-3 gap-x-6 gap-y-4 h-full w-full mt-4">
+              {meetings.map((item) => (
+                <div className="flex">
+                  <p className="">{item.title}</p>
+                </div>
+              ))}
+            </div>
+          </>
+        )}
       </div>
     </AdminLayout>
   );

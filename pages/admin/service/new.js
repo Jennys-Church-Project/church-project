@@ -8,6 +8,7 @@ import _ from "lodash";
 import { Menu, Dialog, Transition } from "@headlessui/react";
 import { v4 as UUID } from "uuid";
 import DatePicker from "react-datepicker";
+import Spinner from "../../../components/spinner";
 
 import "react-datepicker/dist/react-datepicker.css";
 
@@ -18,7 +19,6 @@ import { format } from "date-fns";
 import firebase from "firebase/app";
 import "firebase/firestore";
 import "firebase/storage";
-import Spinner from "../../../components/spinner";
 
 export async function getStaticProps(_context) {
   let speakers = [];
@@ -95,7 +95,7 @@ function PostNewService({ speakers }) {
         <div className="flex flex-col">
           {/* title */}
           <h2 className="text-xl">Post a new service</h2>
-          <p className="text-xs font-serif text-gray-500">
+          <p className="text-sm font-serif text-gray-500">
             Create a new service. This will be available to all members
           </p>
         </div>
@@ -434,6 +434,8 @@ function PostNewService({ speakers }) {
                     </div>
                   )}
                 </div>
+
+                {/* actions */}
                 <div className="flex flex-row justify-end items-center space-x-4 px-4 py-3 bg-gray-50 text-right sm:px-6">
                   <button
                     className="btn-outlined"

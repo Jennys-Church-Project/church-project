@@ -10,11 +10,6 @@ import { v4 as UUID } from "uuid";
 import DatePicker from "react-datepicker";
 import Spinner from "../../../components/spinner";
 
-import "react-datepicker/dist/react-datepicker.css";
-
-// date format
-import { format } from "date-fns";
-
 // firebase
 import firebase from "firebase/app";
 import "firebase/firestore";
@@ -48,7 +43,7 @@ function PostNewService({ speakers }) {
   const [bannerFile, setBannerFile] = useState(null);
   const [streamLink, setStreamLink] = useState("");
   const [selectedSpeakers, setSelectedSpeakers] = useState([]);
-  const [timestamp, setTimestamp] = useState(0);
+  const [timestamp, setTimestamp] = useState(new Date());
 
   // create a new service
   const createService = async (e) => {
@@ -124,6 +119,7 @@ function PostNewService({ speakers }) {
                           type="text"
                           name="title"
                           id="title"
+                          required
                           onChange={(e) => setServiceTitle(e.target.value)}
                           className="focus:ring-black focus:border-black flex-1 block w-full rounded-none rounded-r-md sm:text-sm border-gray-300"
                           placeholder="e.g. Glorious Sunday Service"
@@ -164,6 +160,7 @@ function PostNewService({ speakers }) {
                       </p>
                       <DatePicker
                         selected={timestamp}
+                        required={true}
                         className="mt-1 focus:ring-black focus:border-black flex-1 block w-full rounded-none rounded-r-md sm:text-sm border-gray-300"
                         onChange={(date) => setTimestamp(date)}
                       />
@@ -439,13 +436,14 @@ function PostNewService({ speakers }) {
                 <div className="flex flex-row justify-end items-center space-x-4 px-4 py-3 bg-gray-50 text-right sm:px-6">
                   <button
                     className="btn-outlined"
+                    type="reset"
                     onClick={() => router.push("/admin/service")}
                   >
                     <h6>Cancel</h6>
                   </button>
                   <button
                     className="btn-primary"
-                    // disabled={true}
+                    type="submit"
                     onClick={createService}
                   >
                     <h6>Save changes</h6>

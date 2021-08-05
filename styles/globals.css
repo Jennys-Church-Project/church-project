@@ -12,6 +12,9 @@
 @tailwind components;
 @tailwind utilities;
 
+/* date picker css */
+@import url("react-datepicker/dist/react-datepicker.css");
+
 /* images */
 .cover__image {
   @apply lg:min-w-full object-cover rounded;

@@ -7,18 +7,30 @@
  */
 
 import Head from "next/head";
-import Link from "next/link";
 import { useState } from "react";
 import { kAppName } from "../../utils/constants";
-import { AiOutlineClose } from "react-icons/ai";
 import { toast, ToastContainer } from "react-nextjs-toast";
+import DatePicker from "react-datepicker";
+import { format } from "date-fns";
 
 function RegisterAccount() {
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [middleName, setMiddleName] = useState("");
+  const [address, setAddress] = useState("");
+  const [position, setPosition] = useState("");
+  const [contact, setContact] = useState("");
+  const [hometown, setHomeTown] = useState("");
+  const [nationality, setNationality] = useState("Ghanaian");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState(false);
+  const [timestamp, setTimestamp] = useState(new Date());
 
   const createMember = async (e) => {
     e.preventDefault();
-    if (e.target.password.value !== e.target.password_confirm.value) {
+    if (password !== confirmPassword) {
       toast.notify("Passwords do not match", {
         duration: 5,
         type: "error",
@@ -30,18 +42,18 @@ function RegisterAccount() {
 
     const res = await fetch("/api/register", {
       body: JSON.stringify({
-        first_name: e.target.first_name.value,
-        last_name: e.target.last_name.value,
-        email: e.target.email.value,
-        middle_name: e.target.middle_name.value,
-        password: e.target.password.value,
+        first_name: firstName,
+        last_name: lastName,
+        email,
+        middle_name: middleName,
+        password,
         avatar: "",
-        dob: e.target.dob.value,
-        address: e.target.address.value,
-        position: e.target.position.value,
-        contact: e.target.contact.value,
-        hometown: e.target.hometown.value,
-        nationality: e.target.nationality.value,
+        dob: format(timestamp, "MM/dd/yyyy"),
+        address,
+        position,
+        contact,
+        hometown,
+        nationality,
       }),
       headers: {
         "Content-Type": "application/json",
@@ -114,6 +126,8 @@ function RegisterAccount() {
                       type="text"
                       placeholder="e.g. John"
                       name="first_name"
+                      value={firstName}
+                      onChange={(e) => setFirstName(e.target.value)}
                       required
                     />
                   </div>
@@ -125,6 +139,8 @@ function RegisterAccount() {
                       type="text"
                       placeholder="e.g. Doe"
                       name="last_name"
+                      value={lastName}
+                      onChange={(e) => setLastName(e.target.value)}
                       required
                     />
                   </div>
@@ -136,6 +152,8 @@ function RegisterAccount() {
                       type="text"
                       placeholder="e.g. Alex"
                       name="middle_name"
+                      value={middleName}
+                      onChange={(e) => setMiddleName(e.target.value)}
                     />
                   </div>
                 </div>
@@ -149,6 +167,8 @@ function RegisterAccount() {
                       type="email"
                       placeholder="e.g. john.doe@mail.com"
                       name="email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
                       required
                     />
                   </div>
@@ -160,6 +180,8 @@ function RegisterAccount() {
                       type="number"
                       placeholder="e.g. 05541234569"
                       name="contact"
+                      value={contact}
+                      onChange={(e) => setContact(e.target.value)}
                     />
                   </div>
                 </div>
@@ -173,17 +195,19 @@ function RegisterAccount() {
                       type="text"
                       placeholder="e.g. Accra Central"
                       name="hometown"
+                      value={hometown}
+                      onChange={(e) => setHomeTown(e.target.value)}
                     />
                   </div>
 
                   {/* dob */}
                   <div className="form-control">
                     <label htmlFor="dob">Date of Birth *</label>
-                    <input
-                      type="text"
-                      placeholder="e.g. 23/08/1993"
-                      name="dob"
-                      required
+                    <DatePicker
+                      selected={timestamp}
+                      required={true}
+                      className="mt-1 focus:ring-black focus:border-black flex-1 block w-full rounded-none rounded-r-md sm:text-sm border-gray-300"
+                      onChange={(date) => setTimestamp(date)}
                     />
                   </div>
 
@@ -195,8 +219,8 @@ function RegisterAccount() {
                       placeholder="e.g. Ghanaian"
                       value={"Ghanaian"}
                       name="nationality"
-
-                      // disabled
+                      value={nationality}
+                      onChange={(e) => setNationality(e.target.value)}
                     />
                   </div>
                 </div>
@@ -209,6 +233,8 @@ function RegisterAccount() {
                       type="text"
                       placeholder="GA-512-9090"
                       name="address"
+                      value={address}
+                      onChange={(e) => setAddress(e.target.value)}
                       required
                     />
                   </div>
@@ -220,6 +246,8 @@ function RegisterAccount() {
                       type="text"
                       placeholder="e.g. Deacon"
                       name="position"
+                      value={position}
+                      onChange={(e) => setPosition(e.target.value)}
                       required
                     />
                   </div>
@@ -232,8 +260,11 @@ function RegisterAccount() {
                     <label htmlFor="password">Password *</label>
                     <input
                       type="password"
+                      id="password"
                       placeholder="e.g. church1234"
                       name="password"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
                       required
                     />
                   </div>
@@ -245,6 +276,9 @@ function RegisterAccount() {
                       type="password"
                       placeholder="e.g. church1234"
                       name="password_confirm"
+                      id="password_confirm"
+                      value={confirmPassword}
+                      onChange={(e) => setConfirmPassword(e.target.value)}
                       required
                     />
                   </div>
@@ -253,7 +287,6 @@ function RegisterAccount() {
                 {/* submit */}
                 <button
                   type="submit"
-                  onClick={createMember}
                   className={`${loading ? "btn-outlined" : "btn-primary"} 
                     w-1/2 float-right mt-4`}
                 >

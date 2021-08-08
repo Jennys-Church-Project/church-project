@@ -76,7 +76,7 @@ function Meetings({ meetings }) {
           <>
             <div className="grid grid-cols-2 2xl:grid-cols-3 gap-x-6 gap-y-4 h-full w-full mt-4">
               {meetings.map((item) => (
-                <div className="flex">
+                <div className="flex" key={item.id}>
                   <p className="">{item.title}</p>
                 </div>
               ))}

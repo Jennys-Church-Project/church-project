@@ -27,6 +27,8 @@ export default async function registerMember(req, res) {
     avatar,
   } = req.body;
 
+  console.log(req.body);
+
   try {
     const { user } = await firebase
       .auth()

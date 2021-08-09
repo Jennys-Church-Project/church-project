@@ -48,7 +48,7 @@ function RegisterAccount() {
         middle_name: middleName,
         password,
         avatar: "",
-        dob: format(timestamp, "MM/dd/yyyy"),
+        dob: timestamp.getTime(),
         address,
         position,
         contact,

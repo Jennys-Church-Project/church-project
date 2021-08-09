@@ -9,6 +9,7 @@ import { useRouter } from "next/router";
 import firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/firestore";
+import MeetingCard from "../../../components/meeting.card";
 
 // get all meetings
 export async function getStaticProps(context) {
@@ -76,9 +77,13 @@ function Meetings({ meetings }) {
           <>
             <div className="grid grid-cols-2 2xl:grid-cols-3 gap-x-6 gap-y-4 h-full w-full mt-4">
               {meetings.map((item) => (
-                <div className="flex" key={item.id}>
-                  <p className="">{item.title}</p>
-                </div>
+                <MeetingCard
+                  key={item.id}
+                  meeting={item}
+                  onClick={() =>
+                    router.push(`/admin/meetings/${item.id}/livestream`)
+                  }
+                />
               ))}
             </div>
           </>

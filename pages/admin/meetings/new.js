@@ -17,6 +17,7 @@ function PostNewMeeting() {
   const [timestamp, setTimestamp] = useState(new Date());
   const [meetingTitle, setMeetingTitle] = useState("");
   const [meetingType, setMeetingType] = useState("youth");
+  const [duration, setDuration] = useState(2);
   const [streamLink, setStreamLink] = useState("");
   const [uploading, setUploading] = useState(false);
 
@@ -28,8 +29,10 @@ function PostNewMeeting() {
       title: meetingTitle,
       type: meetingType,
       stream_url: streamLink,
+      download_url: "",
       date: timestamp.getTime(),
-      duration: timestamp.getTime(),
+      duration,
+      attendants: [],
     };
     let docRef = firebase.firestore().collection(kMeetingsRef).doc();
     payload.id = docRef.id;
@@ -134,6 +137,30 @@ function PostNewMeeting() {
                           onChange={(e) => setStreamLink(e.target.value)}
                           className="focus:ring-black focus:border-black flex-1 block w-full rounded-none rounded-r-md sm:text-sm border-gray-300"
                           placeholder="www.example.com"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="col-span-1 sm:col-span-1">
+                      <label
+                        htmlFor="title"
+                        className="block text-sm font-medium text-gray-700"
+                      >
+                        Duration
+                      </label>
+                      <div className="mt-1 flex rounded-md shadow-sm">
+                        <span className="inline-flex items-center px-3 rounded-l-md border border-r-0 border-gray-300 bg-gray-50 text-gray-500 text-sm">
+                          In hours
+                        </span>
+                        <input
+                          type="number"
+                          name="duration"
+                          id="duration"
+                          required
+                          value={duration}
+                          onChange={(e) => setDuration(e.target.value)}
+                          className="focus:ring-black focus:border-black flex-1 block w-full rounded-none rounded-r-md sm:text-sm border-gray-300"
+                          placeholder="3"
                         />
                       </div>
                     </div>

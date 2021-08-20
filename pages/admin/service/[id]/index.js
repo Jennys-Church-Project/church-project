@@ -1,6 +1,6 @@
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import Layout from "../../../../components/layout";
+import Layout from "../../../../components/admin.layout";
 import Spinner from "../../../../components/spinner";
 import UserCard from "../../../../components/user.card";
 import Image from "next/image";
@@ -8,13 +8,13 @@ import Image from "next/image";
 import { BsBookmarkPlus, BsBookmarkFill } from "react-icons/bs";
 import { FiEdit2 } from "react-icons/fi";
 import { RiSettingsLine } from "react-icons/ri";
+import { format, formatDistance, formatRelative, subDays } from "date-fns";
 
 // firebase
 import firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/firestore";
 import { kServicesRef, kSpeakersRef } from "../../../../utils/constants";
-import { format, formatDistance, formatRelative, subDays } from "date-fns";
 
 // get paths
 export async function getStaticPaths() {
@@ -203,12 +203,12 @@ function ServiceItemDetails({ isAdmin, service, speakers }) {
             <h6 className="text-indigo-700 font-semibold">
               {service.dateMonth}
             </h6>
-            <h1 className="text-3xl 2xl:text-4xl mt-1">{service.title}</h1>
-            <div className="mt-2 flex items-center text-sm space-x-2">
+            <h1 className="text-3xl 2xl:text-5xl mt-1">{service.title}</h1>
+            {/* <div className="mt-2 flex items-center text-sm space-x-2">
               <p className="text-gray-400">Between:</p>
 
               <p className="text-indigo-700">{service.duration}</p>
-            </div>
+            </div> */}
             <p className="text-sm font-light font-serif mt-8">{service.desc}</p>
           </div>
         </div>

@@ -91,7 +91,11 @@ function Services({ services }) {
           <>
             <div className="grid grid-cols-2 2xl:grid-cols-3 gap-x-6 gap-y-4 h-full w-full mt-4">
               {services.map((service) => (
-                <ServiceCard key={service.id} service={service} />
+                <ServiceCard
+                  key={service.id}
+                  service={service}
+                  onClick={() => router.push(`/admin/service/${service.id}`)}
+                />
               ))}
             </div>
           </>

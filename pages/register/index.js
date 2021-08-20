@@ -11,7 +11,6 @@ import { useState } from "react";
 import { kAppName } from "../../utils/constants";
 import { toast, ToastContainer } from "react-nextjs-toast";
 import DatePicker from "react-datepicker";
-import { format } from "date-fns";
 
 function RegisterAccount() {
   const [loading, setLoading] = useState("");

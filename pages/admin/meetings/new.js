@@ -8,6 +8,7 @@ import DatePicker from "react-datepicker";
 // firebase
 import firebase from "firebase/app";
 import "firebase/firestore";
+import "firebase/auth";
 
 function PostNewMeeting() {
   // router
@@ -25,14 +26,17 @@ function PostNewMeeting() {
   const create = async (e) => {
     e.preventDefault();
 
+    let uid = firebase.auth().currentUser.uid;
+
     let payload = {
       title: meetingTitle,
       type: meetingType,
       stream_url: streamLink,
       download_url: "",
       date: timestamp.getTime(),
+      created_by: uid,
       duration,
-      attendants: [],
+      attendants: [uid],
     };
     let docRef = firebase.firestore().collection(kMeetingsRef).doc();
     payload.id = docRef.id;

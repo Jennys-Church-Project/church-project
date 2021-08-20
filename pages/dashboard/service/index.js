@@ -16,6 +16,7 @@ import ServiceCard from "../../../components/service.card";
 import firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/firestore";
+import { useRouter } from "next/router";
 
 // get services
 export async function getStaticProps(context) {
@@ -58,6 +59,8 @@ function Service({ services }) {
   // empty ui
   const showEmptyUI = !services || services.length === 0;
 
+  const router = useRouter();
+
   return (
     <Layout>
       <div className="w-full h-full flex flex-col">
@@ -83,7 +86,13 @@ function Service({ services }) {
           <>
             <div className="grid grid-cols-2 2xl:grid-cols-3 gap-x-6 gap-y-4 h-full w-full mt-4">
               {services.map((service) => (
-                <ServiceCard key={service.id} service={service} />
+                <ServiceCard
+                  key={service.id}
+                  service={service}
+                  onClick={() =>
+                    router.push(`/dashboard/service/${service.id}`)
+                  }
+                />
               ))}
             </div>
           </>

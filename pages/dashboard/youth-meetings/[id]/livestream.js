@@ -1,4 +1,4 @@
-import AdminLayout from "../../../../components/admin.layout";
+import Layout from "../../../../components/layout";
 
 // firebase
 import firebase from "firebase/app";
@@ -55,8 +55,8 @@ export async function getStaticProps({ params }) {
 }
 
 function Livestream({ meeting, userId }) {
+  const [hasJoined, setHasJoined] = useState(false);
   const [downloading, setDownloading] = useState(false);
-  const [onGoing, setOnGoing] = useState(meeting.date >= new Date().getTime());
 
   // router
   const router = useRouter();
@@ -77,18 +77,23 @@ function Livestream({ meeting, userId }) {
     }
   };
 
-  // end meeting
-  const endMeeting = async () => {
-    // ! end meeting and create download url from stream
-    setOnGoing(false);
-    const db = firebase.firestore();
-    await db.doc(`${kMeetingsRef}/${meeting.id}`).set({
-      ...meeting,
-    });
+  // join livestream
+  const joinMeeting = async () => {
+    if (!hasJoined) setHasJoined(true);
+
+    if (hasJoined && userId) {
+      console.log("joining meeting");
+      meeting.attendants.push(userId);
+      await firebase
+        .firestore()
+        .doc(`${kMeetingsRef}/${meeting.id}`)
+        .set(meeting, { merge: true });
+      alert("Joined meeting successfully");
+    }
   };
 
   return (
-    <AdminLayout>
+    <Layout>
       <div className="w-full h-full flex flex-col space-y-8">
         <div className="flex flex-row justify-between items-center">
           <div className="flex flex-col items-start">
@@ -116,10 +121,10 @@ function Livestream({ meeting, userId }) {
 
             <button
               type="button"
-              onClick={endMeeting}
-              className={`${!onGoing ? "btn-outlined" : "btn-primary"} w-1/4`}
+              onClick={joinMeeting}
+              className={`${!hasJoined ? "btn-outlined" : "btn-primary"} w-1/4`}
             >
-              <h6 className="">{onGoing ? "End now" : "In session"}</h6>
+              <h6 className="">{hasJoined ? "Joined" : "Join now"}</h6>
             </button>
           </div>
         </div>
@@ -135,13 +140,13 @@ function Livestream({ meeting, userId }) {
             allow="autoplay"
             allowfullscreen
             webkitallowfullscreen
-            mozallowfullscreen
+            mozallowfullscreen="true"
             oallowfullscreen="true"
             msallowfullscreen="true"
           ></iframe>
         </div>
       </div>
-    </AdminLayout>
+    </Layout>
   );
 }
 

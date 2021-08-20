@@ -75,7 +75,7 @@ function Meetings({ meetings }) {
           </>
         ) : (
           <>
-            <div className="grid grid-cols-2 2xl:grid-cols-3 gap-x-6 gap-y-4 h-full w-full mt-4">
+            <div className="grid grid-cols-2 2xl:grid-cols-3 3xl:grid-cols-4 gap-x-6 gap-y-4 h-full w-full mt-4">
               {meetings.map((item) => (
                 <MeetingCard
                   key={item.id}

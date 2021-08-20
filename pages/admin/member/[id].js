@@ -3,6 +3,8 @@ import Spinner from "../../../components/spinner";
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import { RiImageAddFill } from "react-icons/ri";
+import { format } from "date-fns";
+import DatePicker from "react-datepicker";
 
 // firebase
 import firebase from "firebase/app";
@@ -304,13 +306,25 @@ function UserDetails({ person }) {
             {/* nationality & dob section */}
             <div className="form-row">
               {/* dob */}
-              <div className="form-control">
+              <div className="form-control flex flex-col">
                 <label htmlFor="dob">Date of Birth</label>
-                <input
+                <DatePicker
+                  id="dob"
+                  selected={new Date(editableUser.dob)}
+                  required={true}
+                  className="focus:ring-black focus:border-black w-full rounded-full sm:text-sm border-gray-300"
+                  onChange={(date) =>
+                    setEditableUser({
+                      ...editableUser,
+                      dob: date.getTime(),
+                    })
+                  }
+                />
+                {/* <input
                   type="text"
                   placeholder="e.g. 23/08/1993"
                   name="dob"
-                  value={editableUser.dob}
+                  value={format(editableUser.dob, "dd/MM/yyyy")}
                   onChange={(e) =>
                     setEditableUser({
                       ...editableUser,
@@ -318,7 +332,7 @@ function UserDetails({ person }) {
                     })
                   }
                   required
-                />
+                /> */}
               </div>
 
               {/* nationality */}
@@ -404,7 +418,7 @@ function UserDetails({ person }) {
 
         {/* financial info */}
         <div className="flex-1 flex flex-col space-y-4">
-          <h2 className="text-2xl">Financial Status</h2>
+          {/* <h2 className="text-2xl">Financial Status</h2> */}
         </div>
       </div>
     </AdminLayout>

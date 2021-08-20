@@ -1,4 +1,4 @@
-import AdminLayout from "../../../../components/admin.layout";
+import Layout from "../../../../components/layout";
 
 // firebase
 import firebase from "firebase/app";
@@ -6,14 +6,13 @@ import "firebase/auth";
 import "firebase/firestore";
 import { useState } from "react";
 import Spinner from "../../../../components/spinner";
-import { kMeetingsRef } from "../../../../utils/constants";
-import { useRouter } from "next/router";
+import { kServicesRef, kSpeakersRef } from "../../../../utils/constants";
 
 // get paths
 export async function getStaticPaths() {
-  // get all meetings
+  // get all services
   const db = firebase.firestore();
-  const res = await db.collection(kMeetingsRef).get();
+  const res = await db.collection(kServicesRef).get();
 
   // construct paths
   const paths = res.docs.map((doc) => {
@@ -40,60 +39,70 @@ export async function getStaticProps({ params }) {
   let { id } = params;
 
   const db = firebase.firestore();
-  const res = await db.doc(`${kMeetingsRef}/${id}`).get();
+  const res = await db.doc(`${kServicesRef}/${id}`).get();
+  const { docs } = await db.collection(kSpeakersRef).get();
+  let churchSpeakers = [];
+  let currentService;
+  if (docs) churchSpeakers = docs.map((item) => item.data());
 
-  let meeting;
-  if (res.exists) meeting = res.data();
+  if (res.exists) {
+    currentService = res.data();
+    currentService.speakers = res
+      .data()
+      .speakers.map((id) => churchSpeakers.find((person) => person.id === id));
+  }
 
   return {
     props: {
       // isAdmin: currentUser?.email === "admin@church.com",
-      meeting,
+      service: currentService,
+      speakers: churchSpeakers,
       userId: currentUser?.uid || null,
     },
   };
 }
 
-function Livestream({ meeting, userId }) {
+function Livestream({ service, userId }) {
+  const [hasJoined, setHasJoined] = useState(false);
   const [downloading, setDownloading] = useState(false);
-  const [onGoing, setOnGoing] = useState(meeting.date >= new Date().getTime());
-
-  // router
-  const router = useRouter();
 
   // download streamed video
   const downloadVideo = async () => {
     // TODO -> DOWNLOAD VIDEO
     if (
       confirm(
-        "Do you wish to start downloading this recording? (NB: Data charges apply)"
+        "Do you wish to start downloading this sermon? (NB: Data charges apply)"
       )
     ) {
       setDownloading(true);
-      await router.push(meeting.download_url);
-      //   setTimeout(() => {
-      //     setDownloading(false);
-      //   }, 3500);
+      setTimeout(() => {
+        setDownloading(false);
+      }, 3500);
     }
   };
 
-  // end meeting
-  const endMeeting = async () => {
-    // ! end meeting and create download url from stream
-    setOnGoing(false);
-    const db = firebase.firestore();
-    await db.doc(`${kMeetingsRef}/${meeting.id}`).set({
-      ...meeting,
-    });
+  // join livestream
+  const joinService = async () => {
+    if (!hasJoined) setHasJoined(true);
+
+    if (hasJoined && userId) {
+      console.log("joining service");
+      service.attendants.push(userId);
+      await firebase
+        .firestore()
+        .doc(`${kServicesRef}/${service.id}`)
+        .set(service, { merge: true });
+      alert("Joined service successfully");
+    }
   };
 
   return (
-    <AdminLayout>
+    <Layout>
       <div className="w-full h-full flex flex-col space-y-8">
         <div className="flex flex-row justify-between items-center">
           <div className="flex flex-col items-start">
             <h6 className="text-sm">Streaming now....</h6>
-            <h1 className="text-3xl text-indigo-700">{meeting.title}</h1>
+            <h1 className="text-3xl text-indigo-700">{service.title}</h1>
           </div>
 
           {/* button */}
@@ -103,23 +112,21 @@ function Livestream({ meeting, userId }) {
                 <Spinner size={8} />
               </div>
             ) : (
-              meeting.download_url && (
-                <button
-                  type="button"
-                  onClick={downloadVideo}
-                  className={`btn-primary w-1/2`}
-                >
-                  <h6 className="">Download meeting</h6>
-                </button>
-              )
+              <button
+                type="button"
+                onClick={downloadVideo}
+                className={`btn-primary w-1/3`}
+              >
+                <h6 className="">Download sermon</h6>
+              </button>
             )}
 
             <button
               type="button"
-              onClick={endMeeting}
-              className={`${!onGoing ? "btn-outlined" : "btn-primary"} w-1/4`}
+              onClick={joinService}
+              className={`${!hasJoined ? "btn-outlined" : "btn-primary"} w-1/4`}
             >
-              <h6 className="">{onGoing ? "End now" : "In session"}</h6>
+              <h6 className="">{hasJoined ? "Joined" : "Join now"}</h6>
             </button>
           </div>
         </div>
@@ -127,7 +134,7 @@ function Livestream({ meeting, userId }) {
         {/* stream */}
         <div className="flex-1 mt-8 h-3/4 w-full">
           <iframe
-            src={meeting.stream_url}
+            src={service.stream_url}
             width="100%"
             height={720}
             frameborder="0"
@@ -136,12 +143,12 @@ function Livestream({ meeting, userId }) {
             allowfullscreen
             webkitallowfullscreen
             mozallowfullscreen
-            oallowfullscreen="true"
+            oallowfullscreen
             msallowfullscreen="true"
           ></iframe>
         </div>
       </div>
-    </AdminLayout>
+    </Layout>
   );
 }
 

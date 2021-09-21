@@ -49,6 +49,8 @@ function PostNewService({ speakers }) {
   const createService = async (e) => {
     e.preventDefault();
 
+    let uid = firebase.auth().currentUser.uid;
+
     let payload = {
       title: serviceTitle,
       desc: serviceDesc,
@@ -58,6 +60,7 @@ function PostNewService({ speakers }) {
       date: timestamp.getTime(),
       duration: timestamp.getTime(),
       stream_url: streamLink,
+      attendants: [uid],
     };
     let docRef = firebase.firestore().collection(kServicesRef).doc();
     payload.id = docRef.id;

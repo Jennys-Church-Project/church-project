@@ -14,6 +14,10 @@ export const kSpeakersRef = "speakers";
 export const kFinancesRef = "finances";
 export const kMeetingsRef = "meetings";
 
+export const kPaymentTypeTithe = "Tithe";
+export const kPaymentTypeOffering = "Offering";
+export const kPaymentTypeOther = "Other";
+
 // local storage
 export const kUserId = "user.id";
 export const kUserType = "user.type";

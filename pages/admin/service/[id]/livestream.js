@@ -106,7 +106,7 @@ function Livestream({ service, userId }) {
           </div>
 
           {/* button */}
-          <div className="flex flex-row items-center space-x-4 w-1/2 justify-end">
+          <div className="flex flex-row items-center space-x-4 w-full xl:w-1/2 justify-end">
             {downloading ? (
               <div className="w-12">
                 <Spinner size={8} />
@@ -115,7 +115,7 @@ function Livestream({ service, userId }) {
               <button
                 type="button"
                 onClick={downloadVideo}
-                className={`btn-primary w-1/3`}
+                className={`btn-primary w-1/2 xl:w-1/3`}
               >
                 <h6 className="">Download sermon</h6>
               </button>
@@ -124,7 +124,9 @@ function Livestream({ service, userId }) {
             <button
               type="button"
               onClick={joinService}
-              className={`${!hasJoined ? "btn-outlined" : "btn-primary"} w-1/4`}
+              className={`${
+                !hasJoined ? "btn-outlined" : "btn-primary"
+              } w-1/2 xl:w-1/4`}
             >
               <h6 className="">{hasJoined ? "Joined" : "Join now"}</h6>
             </button>

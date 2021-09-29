@@ -11,14 +11,17 @@ import {
   kPaymentTypeOffering,
   kPaymentTypeOther,
   kPaymentTypeTithe,
+  kPaystackApiKey,
+  kWelfareRef,
 } from "../../../utils/constants";
-import { Menu, Dialog, Transition } from "@headlessui/react";
+import { Menu, Transition } from "@headlessui/react";
+import { usePaystackPayment } from "react-paystack";
 
 // firebase
 import firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/firestore";
-import { Fragment, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import Spinner from "../../../components/spinner";
 
@@ -29,24 +32,70 @@ function Welfare() {
   const [loading, setLoading] = useState(false);
   const [paymentType, setPaymentType] = useState(kPaymentTypeTithe);
 
-  const makePayment = async (e) => {
-    e.preventDefault();
-    if (amount === "") {
-      alert("Enter an amount first");
-      return;
+  // called when transaction succeeds/fails
+  const onSuccess = async (reference) => {
+    // reference: "1631863616810";
+    // status: "success";
+    // trans: "1331033930";
+    // transaction: "1331033930";
+
+    if (reference.status === "success") {
+      // Implementation for whatever you want to do with reference and after success call.
+      console.log(reference);
+      save(reference.transition);
+    } else {
+      alert("Failed to complete transaction");
     }
+  };
+
+  // called when transaction window is closed
+  const onClose = () => {
+    // implementation for  whatever you want to do when the Paystack dialog closed.
+    console.log("closed");
+  };
+
+  const config = {
+    reference: new Date().getTime(),
+    email: firebase.auth().currentUser?.email || "",
+    amount: parseInt(amount) * 100,
+    currency: "GHS",
+    publicKey: kPaystackApiKey,
+  };
+
+  let initializePayment = usePaystackPayment(config);
+
+  // save to firebase
+  const save = async (transactionId) => {
     setLoading(true);
-    let uid = firebase.auth().currentUser.uid;
-    await firebase.firestore().collection("welfare").doc().set({
+    let uid = "aX14iOU1HxhocLne1VcwOyxj4NE3" || firebase.auth().currentUser.uid;
+    await firebase.firestore().collection(kWelfareRef).doc().set({
       user: uid,
       amount,
       paymentType,
+      transactionId,
       created_at: new Date().getTime(),
     });
     setLoading(false);
     alert("Payment was successful");
     router.push("/dashboard/service");
   };
+
+  const makePayment = async (e) => {
+    e.preventDefault();
+    if (amount === "") {
+      alert("Enter an amount first");
+      return;
+    }
+
+    if (confirm(`Proceed with payment of ₵${amount}?`)) {
+      initializePayment(onSuccess, onClose);
+    }
+  };
+
+  // useEffect(() => {
+
+  //   return null;
+  // }, []);
 
   return (
     <Layout>

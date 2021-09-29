@@ -37,7 +37,7 @@ function FinancialStatusInfo() {
           </p>
         </div>
 
-        <div className="flex flex-col space-y-2 w-2/3">
+        <div className="flex flex-col space-y-2 w-2/3 3xl:w-full">
           {payments.map((item) => (
             <UserFinanceListItem welfare={item} key={item.user} />
           ))}

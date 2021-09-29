@@ -27,7 +27,7 @@ function FinancialStatusInfo() {
 
   return (
     <AdminLayout>
-      <div className="flex flex-col space-y-8 justify-between items-center">
+      <div className="flex flex-col space-y-4 items-start">
         {/* left */}
         <div className="flex flex-col space-y-1">
           {/* title of page */}
@@ -37,14 +37,9 @@ function FinancialStatusInfo() {
           </p>
         </div>
 
-        <div className="w-full px-8 py-6 flex flex-col space-y-2">
+        <div className="flex flex-col space-y-2 w-2/3">
           {payments.map((item) => (
-            <UserFinanceListItem
-              user={item.user}
-              key={item.user}
-              createdAt={item.created_at}
-              amount={item.amount}
-            />
+            <UserFinanceListItem welfare={item} key={item.user} />
           ))}
         </div>
       </div>

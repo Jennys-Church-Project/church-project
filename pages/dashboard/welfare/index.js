@@ -41,6 +41,7 @@ function Welfare() {
       user: uid,
       amount,
       paymentType,
+      created_at: new Date().getTime(),
     });
     setLoading(false);
     alert("Payment was successful");

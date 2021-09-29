@@ -13,6 +13,7 @@ export const kMembersRef = "members";
 export const kSpeakersRef = "speakers";
 export const kFinancesRef = "finances";
 export const kMeetingsRef = "meetings";
+export const kWelfareRef = "welfare";
 
 export const kPaymentTypeTithe = "Tithe";
 export const kPaymentTypeOffering = "Offering";

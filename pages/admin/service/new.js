@@ -1,14 +1,14 @@
 import { useRouter } from "next/router";
-import { Fragment, useEffect, useState } from "react";
+import { Fragment, useState } from "react";
 import Image from "next/image";
 import AdminLayout from "../../../components/admin.layout";
-import DropDown from "../../../components/dropdown";
 import { kServicesRef, kSpeakersRef } from "../../../utils/constants";
 import _ from "lodash";
 import { Menu, Dialog, Transition } from "@headlessui/react";
 import { v4 as UUID } from "uuid";
 import DatePicker from "react-datepicker";
 import Spinner from "../../../components/spinner";
+import { toast, ToastContainer } from "react-nextjs-toast";
 
 // firebase
 import firebase from "firebase/app";
@@ -48,33 +48,45 @@ function PostNewService({ speakers }) {
   // create a new service
   const createService = async (e) => {
     e.preventDefault();
-
-    let uid = firebase.auth().currentUser.uid;
-
-    let payload = {
-      title: serviceTitle,
-      desc: serviceDesc,
-      banner,
-      isOngoing: timestamp.getTime() >= new Date().getTime(),
-      speakers: selectedSpeakers.map((person) => person.id),
-      date: timestamp.getTime(),
-      duration: timestamp.getTime(),
-      stream_url: streamLink,
-      attendants: [uid],
-    };
-    let docRef = firebase.firestore().collection(kServicesRef).doc();
-    payload.id = docRef.id;
-    console.log(payload);
-    setUploading(true);
-    await docRef.set(payload);
-    setUploading(false);
-    alert("Saved successfully");
-    router.push("/admin/service");
+    if (banner) {
+      let uid = firebase.auth().currentUser.uid;
+      toast.notify("Creating new service...", {
+        duration: 5,
+        type: "info",
+      });
+      let payload = {
+        title: serviceTitle,
+        desc: serviceDesc,
+        banner,
+        isOngoing: timestamp.getTime() >= new Date().getTime(),
+        speakers: selectedSpeakers.map((person) => person.id),
+        date: timestamp.getTime(),
+        duration: timestamp.getTime(),
+        stream_url: streamLink,
+        attendants: [uid],
+      };
+      let docRef = firebase.firestore().collection(kServicesRef).doc();
+      payload.id = docRef.id;
+      console.log(payload);
+      setUploading(true);
+      await docRef.set(payload);
+      setUploading(false);
+      alert("Saved successfully");
+      router.push("/admin/service");
+    } else if (bannerFile) {
+      await uploadFile(true);
+    } else {
+      alert("Select an image");
+    }
   };
 
   // upload file
-  const uploadFile = async () => {
+  const uploadFile = async (saveAfterUpload) => {
     if (bannerFile) {
+      toast.notify("Uploading banner for service...", {
+        duration: 5,
+        type: "info",
+      });
       setUploading(true);
       let bucketRef = firebase.storage().ref().child(`services/${UUID()}`);
       bucketRef.put(bannerFile).then(async (snapshot) => {
@@ -82,12 +94,14 @@ function PostNewService({ speakers }) {
         console.log(downloadUrl);
         setUploading(false);
         setBanner(downloadUrl);
+        if (saveAfterUpload) createService();
       });
     }
   };
 
   return (
     <AdminLayout>
+      <ToastContainer align={"right"} position={"bottom"} />
       <div className="w-full h-full flex flex-col">
         {/* header */}
         <div className="flex flex-col">
@@ -417,8 +431,8 @@ function PostNewService({ speakers }) {
                                   onChange={(e) => {
                                     if (e.target.files) {
                                       setBannerFile(e.target.files[0]);
-                                      console.log(bannerFile);
-                                      if (bannerFile) uploadFile();
+                                      console.log(e.target.files[0]);
+                                      if (e.target.files[0]) uploadFile(false);
                                     }
                                   }}
                                 />

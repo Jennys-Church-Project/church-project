@@ -23,7 +23,7 @@ function ServiceCard({ service, onClick }) {
   return (
     <div
       onClick={onClick}
-      className="flex flex-col items-end relative border-none outline-none bg-white transition-all duration-300 rounded-xl hover:shadow hover:bg-opacity-60 max-h-104 cursor-pointer"
+      className="w-full flex flex-col items-end relative border-none outline-none bg-white transition-all duration-300 rounded-xl hover:shadow hover:bg-opacity-60 max-h-104 cursor-pointer"
     >
       {/* banner */}
       <div className="bg-gray-300 outline-none border-none rounded-tl-xl rounded-tr-xl object-cover w-full h-3/5 relative overflow-hidden">
@@ -51,9 +51,9 @@ function ServiceCard({ service, onClick }) {
       )}
 
       {/* info */}
-      <div className="flex flex-col justify-between h-full items-end">
+      <div className="flex flex-col justify-between h-full items-end w-full">
         <div className="flex flex-col justify-start px-4 py-3 overflow-hidden">
-          <div className="grid grid-cols-5 gap-x-2 mb-2">
+          <div className="grid grid-cols-5 gap-x-2 mb-2 w-full">
             {/* title */}
             <h6 className="text-base col-span-3">{service.title}</h6>
 

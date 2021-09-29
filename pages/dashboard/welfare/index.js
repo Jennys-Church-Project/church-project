@@ -42,7 +42,7 @@ function Welfare() {
     if (reference.status === "success") {
       // Implementation for whatever you want to do with reference and after success call.
       console.log(reference);
-      save(reference.transition);
+      save(reference.transaction);
     } else {
       alert("Failed to complete transaction");
     }

@@ -47,7 +47,7 @@ function PostNewService({ speakers }) {
 
   // create a new service
   const createService = async (e) => {
-    e.preventDefault();
+    if (e) e.preventDefault();
     if (banner) {
       let uid = firebase.auth().currentUser.uid;
       toast.notify("Creating new service...", {
@@ -116,7 +116,7 @@ function PostNewService({ speakers }) {
         <div className="mt-8 w-full flex-1">
           <div className="mt-5 md:mt-0">
             {/* form */}
-            <form onSubmit={createService} action="#" method="POST">
+            <form onSubmit={createService}>
               <div className="shadow sm:rounded-md sm:overflow-hidden">
                 <div className="px-4 py-5 bg-white space-y-6 sm:p-6">
                   {/* title */}

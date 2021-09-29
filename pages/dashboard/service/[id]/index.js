@@ -113,23 +113,27 @@ function ServiceItemDetails({ isAdmin, service, speakers }) {
             <div className="flex flex-col h-56 w-full relative">
               {/* banner */}
               <div className="overflow-hidden bg-primary rounded-tr-2xl rounded-tl-2xl h-full w-full">
-                <Image
-                  src={service?.banner}
-                  height={500}
-                  width={800}
-                  objectFit="cover"
-                />
+                {service.banner && service.banner !== "" && (
+                  <Image
+                    src={service?.banner}
+                    height={500}
+                    width={800}
+                    objectFit="cover"
+                  />
+                )}
               </div>
 
               {/* active speaker */}
               {activeSpeaker && activeSpeaker.avatar && (
                 <div className="z-10 rounded-full h-32 w-32 bg-gray-100 border-8 border-white absolute top-3/4 inset-x-0 mx-auto ">
-                  <Image
-                    src={activeSpeaker.avatar}
-                    width={128}
-                    height={128}
-                    className="object-cover rounded-full"
-                  />
+                  {activeSpeaker.avatar && (
+                    <Image
+                      src={activeSpeaker.avatar}
+                      width={128}
+                      height={128}
+                      className="object-cover rounded-full"
+                    />
+                  )}
                 </div>
               )}
             </div>

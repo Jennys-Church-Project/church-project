@@ -246,7 +246,9 @@ function RegisterAccount() {
                       placeholder="e.g. Deacon"
                       name="position"
                       value={position}
-                      onChange={(e) => setPosition(e.target.value)}
+                      onChange={(e) =>
+                        setPosition(e.target.value.toLowerCase())
+                      }
                       required
                     />
                   </div>

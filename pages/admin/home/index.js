@@ -32,7 +32,9 @@ export async function getStaticProps(context) {
     membersSnapshot.docs
       .map((doc) => doc.data())
       .forEach((item) =>
-        item.position === "Member" ? members.push(item) : otherStaff.push(item)
+        item.position === "member" || item.position === "Member"
+          ? members.push(item)
+          : otherStaff.push(item)
       );
   }
 
